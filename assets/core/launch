@@ -1,0 +1,17 @@
+#!/bin/sh
+
+binary=$1
+ext_ctl_port=$2
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+
+chown root:admin "$script_dir/$binary"
+chmod +sx "$script_dir/$binary"
+
+pkill $binary
+
+if [ -z "$ext_ctl_port" ]; then
+  ext_ctl_port=37550
+fi
+
+"$script_dir/$binary" -ext-ctl 127.0.0.1:$ext_ctl_port > /dev/null 2>&1 &
