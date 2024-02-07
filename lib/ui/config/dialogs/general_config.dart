@@ -162,7 +162,7 @@ class _GeneralConfigState extends ConsumerState<GeneralConfig> {
                       children: [
                         geoFile.whenOrNull(
                               data: (data) => Text(
-                                data == null ? "未找到 GeoIP 数据库" : data.lastModifiedSync().toIso8601String(),
+                                data == null ? "未找到 GeoIP 数据库" : "修改时间：${data.lastModifiedSync()}",
                                 style: typography.body,
                               ),
                             ) ??
@@ -171,7 +171,7 @@ class _GeneralConfigState extends ConsumerState<GeneralConfig> {
                               style: typography.body,
                             ),
                         Text(
-                          'Clash-Fudge 使用由 MaxMind 提供的 GeoLite2 数据库',
+                          '数据文件来自：https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb',
                           style: typography.subheadline
                               .copyWith(color: MacosColors.systemGrayColor.withOpacity(0.8), height: 1.7),
                         ),
@@ -181,7 +181,9 @@ class _GeneralConfigState extends ConsumerState<GeneralConfig> {
                           ),
                           child: PushButton(
                             controlSize: ControlSize.regular,
-                            onPressed: () {},
+                            onPressed: () {
+                              ref.read(geoFileProvider.notifier).fetch();
+                            },
                             secondary: true,
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 24),

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:clash_fudge/enums/type.dart';
 // import 'package:clash_fudge/models/clash_config.dart.bak';
@@ -9,6 +10,7 @@ import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
 import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/log.dart';
+import 'package:local_notifier/local_notifier.dart';
 
 class Http {
   static late Dio _dio;
@@ -33,8 +35,14 @@ class Http {
           if (path != '/') {
             Log.e(
                 [error.requestOptions.path.toString(), error.requestOptions.data], error.requestOptions.uri.toString());
+            final errText = (error.response?.statusCode.toString() ?? "") + (error.response?.data.toString() ?? "");
+            LocalNotification(title: "内核通信错误", body: errText, actions: [LocalNotificationAction(text: "复制")])
+              ..onClick = () {
+                FlutterClipboard.copy(errText);
+              }
+              ..show();
           }
-          // 如果你想完成请求并返回一些自定义数据，你可以使用 `handler.resolve(response)`。
+
           return handler.next(error);
         },
       ),
@@ -170,5 +178,9 @@ class Http {
 
   static restartCore(String path) async {
     return _dio.post("/restart", data: {"path": path, "payload": ""});
+  }
+
+  static geo(String path) async {
+    return _dio.post("/configs/geo", data: {"path": path, "payload": ""});
   }
 }

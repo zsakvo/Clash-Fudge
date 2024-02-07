@@ -17,7 +17,7 @@ Future<void> main() async {
     WindowOptions windowOptions = const WindowOptions(
       size: Size(1070, 670),
       minimumSize: Size(1070, 670),
-      skipTaskbar: true,
+      skipTaskbar: false,
       titleBarStyle: TitleBarStyle.hidden,
       backgroundColor: Color.fromRGBO(0, 0, 0, 0),
     );
