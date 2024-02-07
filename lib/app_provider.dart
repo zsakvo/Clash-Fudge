@@ -75,8 +75,6 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       appPath: Platform.resolvedExecutable,
     );
     bool autoStart = await launchAtStartup.isEnabled();
-    Const.systemTray = SystemTray();
-    await Const.systemTray.initSystemTray(iconPath: "assets/icon/systray.png", width: 24);
     Const.systemTray.registerSystemTrayEventHandler((eventName) {
       final leftClickEvent = state.value?.sysTrayClick ?? SysTrayClick.window;
       if (eventName == Const.kSystemTrayEventRightClick) {
@@ -89,9 +87,7 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
         }
       }
     });
-
     initSocket();
-
     profilePath = prefs.getString('profilePath') ?? "${Const.appSupportPath}/profiles";
     final yamlDir = Directory("$profilePath/yamls");
     if (!yamlDir.existsSync()) yamlDir.createSync(recursive: true);
@@ -104,6 +100,8 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     } else {
       final Map<String, dynamic> configMap = jsonDecode(appConfigFile.readAsStringSync());
       configMap['autoStart'] = autoStart;
+
+      if (configMap['sysTrayShow'] != SysTrayShow.all.name) socketListener.pause();
       setCurrentProfile();
       if (configMap['isSysProxy'] == true) {
         final port = configMap['core']['mixed-port'];
