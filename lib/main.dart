@@ -3,9 +3,11 @@ import 'package:clash_fudge/components/welcome/load_err.dart';
 import 'package:clash_fudge/components/welcome/loading_core.dart';
 import 'package:clash_fudge/ui/home/home_screen.dart';
 import 'package:clash_fudge/utils/constant.dart';
+import 'package:clash_fudge/utils/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:system_tray/system_tray.dart';
@@ -34,10 +36,28 @@ Future<void> main() async {
   runApp(UncontrolledProviderScope(container: container, child: const FC()));
 }
 
-class FC extends HookConsumerWidget {
+class FC extends HookConsumerWidget with WindowListener {
   const FC({super.key});
+
+  @override
+  void onWindowClose() {
+    windowManager.setSkipTaskbar(true);
+    super.onWindowClose();
+  }
+
+  @override
+  void onWindowFocus() {
+    windowManager.isSkipTaskbar().then((value) => {
+          if (value) {windowManager.setSkipTaskbar(false)}
+        });
+    super.onWindowFocus();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(() {
+      windowManager.addListener(this);
+    }, []);
     final status = ref.watch(coreStartUpProvider);
     return MacosApp(
       title: "Clash-Fudge",
