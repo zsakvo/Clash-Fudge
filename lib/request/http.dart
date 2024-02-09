@@ -13,16 +13,13 @@ import 'package:clash_fudge/utils/log.dart';
 import 'package:local_notifier/local_notifier.dart';
 
 class Http {
-  static late Dio _dio;
-
-  static init() async {
-    _dio = Dio(BaseOptions(
-      baseUrl: "http://${Const.clashServerUrl}",
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      headers: {'User-Agent': 'Clash-Fudge/1.0.0'},
-    ));
-    _dio.interceptors.add(
+  static final Dio _dio = Dio(BaseOptions(
+    baseUrl: "http://${Const.clashServerUrl}",
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 5),
+    headers: {'User-Agent': 'Clash-Fudge/1.0.0'},
+  ))
+    ..interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
           return handler.next(options);
@@ -42,12 +39,10 @@ class Http {
               }
               ..show();
           }
-
           return handler.next(error);
         },
       ),
     );
-  }
 
   static Future<Response> _downloadFile({
     required String url,

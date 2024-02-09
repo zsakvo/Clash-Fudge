@@ -13,8 +13,8 @@ class InfoCard extends HookConsumerWidget {
       required this.labelColor});
   final String title;
   final String iconName;
-  final String mainText;
-  final String subText;
+  final dynamic mainText;
+  final dynamic subText;
   final Color labelColor;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +52,7 @@ class InfoCard extends HookConsumerWidget {
               ),
               RichText(
                   text: TextSpan(style: const TextStyle(color: MacosColors.black, height: 1.4), children: [
-                TextSpan(text: mainText, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+                TextSpan(text: mainText.toString(), style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
                 TextSpan(text: "\t$subText", style: const TextStyle(fontSize: 13))
               ]))
             ],

@@ -1,22 +1,19 @@
-import 'package:clash_fudge/app_provider.dart';
-import 'package:clash_fudge/components/welcome/load_err.dart';
-import 'package:clash_fudge/components/welcome/loading_core.dart';
 import 'package:clash_fudge/ui/home/home_screen.dart';
 import 'package:clash_fudge/utils/constant.dart';
-import 'package:clash_fudge/utils/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
-
+  Const.appSupportPath = (await getApplicationSupportDirectory()).path;
   if (!kIsWeb) {
     Const.systemTray = SystemTray();
     await Const.systemTray.initSystemTray(iconPath: "assets/icon/systray.png", width: 24);
@@ -57,19 +54,13 @@ class FC extends HookConsumerWidget with WindowListener {
   Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
       windowManager.addListener(this);
+      return null;
     }, []);
-    final status = ref.watch(coreStartUpProvider);
     return MacosApp(
       title: "Clash-Fudge",
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
-      home: status.when(
-          data: (data) => data ? const HomeScreen() : const Text("启动失败"),
-          error: (error, stackTrace) => LoadError(
-                error: error,
-                stackTrace: stackTrace,
-              ),
-          loading: () => const LoadingCore()),
+      home: const HomeScreen(),
     );
   }
 }

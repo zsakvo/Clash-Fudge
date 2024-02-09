@@ -1,7 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
-// import 'package:clash_fudge/components/buttons/segmented_control.dart';
-// import 'package:clash_fudge/components/tab_view/tab.dart';
 import 'package:clash_fudge/app_provider.dart';
 import 'package:clash_fudge/enums/type.dart';
 import 'package:clash_fudge/ui/activity/components/flow_chart.dart';
@@ -27,15 +23,24 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   final tabPadding = const EdgeInsets.symmetric(horizontal: 32, vertical: 1);
   @override
   Widget build(BuildContext context) {
+    final coreLoaded = ref.watch(coreLoadedProvider).value ?? false;
     final typography = MacosTypography.of(context);
     final snapshot = ref.watch(snapshotProvider);
     final chart = ref.watch(chartProvider);
-    final isSysProxy = ref.watch(appConfigProvider.select((data) => data.value?.isSysProxy)) ?? false;
-    final tunEnable = ref.watch(appConfigProvider.select((data) => data.value?.core.tun.enable)) ?? false;
+    final isSysProxy =
+        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.isSysProxy)) ?? false : false;
+    final tunEnable =
+        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.tun.enable)) ?? false : false;
     final memoryUsage = ref.watch(clashMemoryProvider);
     final matchProxyDelay = ref.watch(matchProxyDelayProvider);
     final proxyNum = ref.watch(clashProxiesProvider.select((data) => data.value?.$1.length)) ?? 0;
     final rulesNum = ref.watch(rulesProvider.select((data) => data.value?.length));
+    final port = coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.port)) ?? "--" : "--";
+    final socksPort =
+        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.socksPort)) ?? "--" : "--";
+    final mixedPort =
+        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.mixedPort)) ?? "--" : "--";
+    final controlPort = coreLoaded ? Const.clashPort : "--";
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Column(
@@ -48,55 +53,6 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               style: typography.largeTitle.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          const Padding(
-              padding: EdgeInsets.only(top: 0),
-              child: Row(
-                children: [
-                  // MacosSegmentedControl(
-                  //   controller: _tabController,
-                  //   tabs: [
-                  //     MacosTab(
-                  //         label: '延迟',
-                  //         labelStyle: const TextStyle(fontSize: 12),
-                  //         active: _tabController.index == 0,
-                  //         tabPadding: tabPadding),
-                  //     MacosTab(
-                  //         label: '流量',
-                  //         labelStyle: const TextStyle(fontSize: 12),
-                  //         active: _tabController.index == 1,
-                  //         tabPadding: tabPadding),
-                  //     MacosTab(
-                  //         label: '网络接口',
-                  //         labelStyle: const TextStyle(fontSize: 12),
-                  //         active: _tabController.index == 2,
-                  //         tabPadding: tabPadding),
-                  //   ],
-                  // ),
-
-                  // const Spacer(),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(right: 10),
-                  //   child: PushButton(
-                  //     controlSize: ControlSize.small,
-                  //     secondary: true,
-                  //     child: const Text(
-                  //       '\t\t网络诊断\t\t',
-                  //       style: TextStyle(fontSize: 12),
-                  //     ),
-                  //     onPressed: () {},
-                  //   ),
-                  // ),
-                  // PushButton(
-                  //   controlSize: ControlSize.small,
-                  //   secondary: true,
-                  //   child: const Text(
-                  //     '\t\t延迟测试\t\t',
-                  //     style: TextStyle(fontSize: 12),
-                  //   ),
-                  //   onPressed: () {},
-                  // )
-                ],
-              )),
           Padding(
               padding: const EdgeInsets.only(top: 24),
               child: LayoutBuilder(
@@ -130,24 +86,19 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                           child: InfoCard(
                             title: "内存",
                             mainText: memoryUsage.value?.$1 ?? "0",
-                            subText: memoryUsage.value?.$2 ?? "",
+                            subText: memoryUsage.value?.$2 ?? "B",
                             iconName: 'dribbble',
                             labelColor: MacosColors.controlAccentColor,
                           ),
                         ),
                         Expanded(
-                            child: matchProxyDelay.whenOrNull(
-                                  data: (data) {
-                                    return InfoCard(
-                                      title: data.$1,
-                                      mainText: data.$2.toString(),
-                                      subText: "ms",
-                                      iconName: 'link',
-                                      labelColor: MacosColors.systemOrangeColor,
-                                    );
-                                  },
-                                ) ??
-                                const SizedBox.shrink())
+                            child: InfoCard(
+                          title: matchProxyDelay.value?.$1 ?? "当前节点",
+                          mainText: matchProxyDelay.value?.$2 ?? "--",
+                          subText: "ms",
+                          iconName: 'link',
+                          labelColor: MacosColors.systemOrangeColor,
+                        ))
                       ],
                     ),
                   );
@@ -198,8 +149,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                         child: FlowChart(
                           color: const Color(0xFF27B055),
                           label: "上传",
-                          values: chart.value?.ups ?? [],
-                          labels: chart.value?.upLabels ?? [],
+                          values: coreLoaded ? chart.value?.ups ?? [] : [],
+                          labels: coreLoaded ? chart.value?.upLabels ?? [] : [],
                           // value: trafficFlow.value?.up ?? 0,
                           // xScale: 20,
                           // yScale: 5,
@@ -210,8 +161,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                         child: FlowChart(
                           color: const Color(0xff2196f3),
                           label: "下载",
-                          values: chart.value?.downs ?? [],
-                          labels: chart.value?.downLabels ?? [],
+                          values: coreLoaded ? chart.value?.downs ?? [] : [],
+                          labels: coreLoaded ? chart.value?.downLabels ?? [] : [],
                           // value: trafficFlow.value?.down ?? 0,
                           // xScale: 20,
                           // yScale: 5,
@@ -235,24 +186,24 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
-                      const InfoLog(
+                      InfoLog(
                         subtitle: '2024/1/21 10:14:45',
-                        content: '混合代理服务已启动，监听在 127.0.0.1，端口号 17890',
+                        content: '混合代理服务已启动，监听在 127.0.0.1，端口号 $port',
                         level: AppLogLevel.SUCCESS,
                       ),
-                      const InfoLog(
+                      InfoLog(
                         subtitle: '2024/1/21 10:14:46',
-                        content: 'SOCKS5 代理服务已启动，监听在 127.0.0.1，端口号 17891',
+                        content: 'SOCKS5 代理服务已启动，监听在 127.0.0.1，端口号 $socksPort',
                         level: AppLogLevel.SUCCESS,
                       ),
-                      const InfoLog(
+                      InfoLog(
                         subtitle: '2024/1/21 10:14:47',
-                        content: 'HTTP 代理服务已启动，监听在 127.0.0.1，端口号 17892',
+                        content: 'HTTP 代理服务已启动，监听在 127.0.0.1，端口号 $mixedPort',
                         level: AppLogLevel.SUCCESS,
                       ),
                       InfoLog(
                         subtitle: 'CLASH-FUDGE',
-                        content: '内核已成功启动，RESTFUL-API 地址为 ${Const.clashServerUrl}',
+                        content: '内核已成功启动，RESTFUL-API 地址为 $controlPort',
                         level: AppLogLevel.SUCCESS,
                       ),
                       const Spacer(),

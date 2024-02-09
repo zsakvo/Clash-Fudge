@@ -133,7 +133,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 24),
                           child: Text(
-                            "A Clash GUI based on Flutter.",
+                            "A Clash.Meta GUI based on Flutter.",
                             style: typography.body.copyWith(color: MacosColors.systemGrayColor.withOpacity(0.8)),
                           ),
                         ),

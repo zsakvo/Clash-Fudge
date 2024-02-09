@@ -6,16 +6,19 @@ import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/ui/strategy/strategy_provider.dart';
 import 'package:clash_fudge/utils/profile.dart';
 import 'package:clash_fudge/utils/system.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:proxy_manager/proxy_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_tray/system_tray.dart';
 
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:watcher/watcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -29,18 +32,40 @@ import 'utils/exec.dart';
 import 'utils/log.dart';
 import 'utils/math.dart';
 
-final coreStartUpProvider = FutureProvider<bool>((ref) async {
-  Const.appSupportPath = (await getApplicationSupportDirectory()).path;
-  final exec = await ClashUtil.execCore();
-  if (exec) {
-    Log.i("Core is running on ${Const.clashServerUrl}", "CoreRunning");
-    Log.i(Const.appSupportPath, 'current support path');
-    await ref.read(appConfigProvider.future);
-    // ref.read(clashProxiesProvider.future);
-    return true;
-  } else {
+Future<bool> watchLog() async {
+  final Completer<bool> completer = Completer<bool>();
+  final File logFile = File(Const.logPath);
+
+  try {
+    late StreamSubscription<WatchEvent> watcherSubscription;
+    watcherSubscription =
+        PollingFileWatcher(Const.logPath, pollingDelay: const Duration(milliseconds: 50)).events.listen((event) async {
+      if (await logFile.readAsString().then((content) => content.contains("RESTful API listening at"))) {
+        watcherSubscription.cancel();
+        completer.complete(true);
+      }
+    });
+
+    // 设置超时
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!completer.isCompleted) {
+        watcherSubscription.cancel();
+        completer.complete(false);
+      }
+    });
+
+    // 等待完成或超时
+    return await completer.future;
+  } catch (e) {
+    // 处理错误
     return false;
   }
+}
+
+final coreLoadedProvider = FutureProvider<bool>((ref) async {
+  File(Const.logPath).writeAsStringSync("");
+  ClashUtil.execCore();
+  return await watchLog();
 });
 
 class AppConfigNotifier extends AsyncNotifier<AppConfig> {
@@ -55,11 +80,7 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     ref.listenSelf((previous, next) async {
       final nextValue = next.value;
       if (nextValue != null) {
-        ref.read(clashProxiesProvider).whenOrNull(
-          data: (data) {
-            setTrayMenus(data.$2);
-          },
-        );
+        setTrayMenus(ref.read(clashProxiesProvider).value?.$2 ?? []);
         appConfigFile.writeAsStringSync(jsonEncode(nextValue.toJson()));
         ClashFudgeProfile(content: File("${Const.appSupportPath}/config.yaml").readAsStringSync())
           ..updateValues(nextValue.core.toJson())
@@ -107,8 +128,8 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
         final port = configMap['core']['mixed-port'];
         setSysProxy(status: true, updateProfile: false, port: port);
       }
-      if (configMap['core']['tun']['enable'] == true) {
-        setTun(status: true, updateProfile: false);
+      if (!kIsRoot) {
+        configMap['core']['tun']['enable'] = false;
       }
       return AppConfig.fromJson(configMap);
     }
@@ -126,20 +147,25 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     if (updateProfile) update((state) => state.copyWith(isSysProxy: value));
   }
 
-  setTun({bool? status, updateProfile = true}) async {
+  setTun({bool? status}) async {
     final value = status ?? !state.value!.core.tun.enable;
-    if (updateProfile) {
-      final core = state.value!.core.copyWith(tun: state.value!.core.tun.copyWith(enable: value));
-      final json = (core).toJson();
-      await Http.patchConfig(json);
-      update((state) => state.copyWith(core: core));
-    }
-    if (status == true) {
-      Http.flushFakeIp();
-      manager.setSystemDns(["192.18.0.2"]);
+    if (value == true) {
+      final coreValue = state.value!.core.copyWith(tun: state.value!.core.tun.copyWith(enable: value));
+      appConfigFile.writeAsStringSync(jsonEncode(state.value!.copyWith(core: coreValue)));
+      ClashFudgeProfile(content: File("${Const.appSupportPath}/config.yaml").readAsStringSync())
+        ..updateValues(coreValue.toJson())
+        ..save(Const.appSupportPath);
+      if (!kIsRoot && (!await _restartCoreWithRoot() || !await watchLog())) {
+        return;
+      }
     } else {
       manager.setSystemDns(["Empty"]);
     }
+    final core = state.value!.core.copyWith(tun: state.value!.core.tun.copyWith(enable: value));
+    update((state) => state.copyWith(core: core));
+    await Http.patchConfig(core.toJson());
+    Http.flushFakeIp();
+    manager.setSystemDns(["192.18.0.2"]);
   }
 
   changeMode(Mode mode) {
@@ -396,6 +422,23 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     await menu.buildFrom(menus);
     Const.systemTray.setContextMenu(menu);
   }
+
+  Future<bool> _restartCoreWithRoot() async {
+    File(Const.logPath).writeAsStringSync("");
+    Log.e(Const.execMacOsCoreCommandWithRoot);
+    final res = await Process.run("/usr/bin/osascript", ["-e", Const.execMacOsCoreCommandWithRoot]);
+    if (res.stderr.toString().trim().isNotEmpty) {
+      LocalNotification(
+          title: "启动失败", body: res.stderr.toString().trim(), actions: [LocalNotificationAction(text: "复制")])
+        ..onClick = () {
+          FlutterClipboard.copy(res.stderr.toString().trim());
+        }
+        ..show();
+      return false;
+    }
+    kIsRoot = true;
+    return true;
+  }
 }
 
 final appConfigProvider = AsyncNotifierProvider<AppConfigNotifier, AppConfig>(AppConfigNotifier.new);
@@ -403,9 +446,13 @@ final appConfigProvider = AsyncNotifierProvider<AppConfigNotifier, AppConfig>(Ap
 class ClashProxiesNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)> {
   @override
   FutureOr<(List<ClashProxy>, List<ClashProxy>)> build() async {
-    final proxies = await Http.fetchProxies();
-    ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
-    return proxies;
+    try {
+      final proxies = await Http.fetchProxies();
+      ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
+      return proxies;
+    } catch (e) {
+      return (<ClashProxy>[], <ClashProxy>[]);
+    }
   }
 }
 

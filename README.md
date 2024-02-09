@@ -72,7 +72,9 @@ open the terminal and run `sudo xattr -r -d com.apple.quarantine /Applications/C
 
 #### 2. Why does it ask for root permission when just started?
 
-If you want to enable the Tun function, the kernel needs to run with root privileges. Currently, for convenience, the application directly requests permission at startup. In the future, we will consider changing the relevant logic.
+~~If you want to enable the Tun function, the kernel needs to run with root privileges. Currently, for convenience, the application directly requests permission at startup. In the future, we will consider changing the relevant logic.~~
+
+Now only able to enable tun.
 
 #### 3. Is it possible to avoid having to enter a password authorization every time I start?
 

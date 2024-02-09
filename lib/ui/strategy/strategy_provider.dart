@@ -32,12 +32,8 @@ class StrategyNotifier extends Notifier<(List<ClashProxy>, List<ClashProxy>)> {
       final group = groups.firstWhere((element) => element.name == groupName);
       final index = groups.indexOf(group);
       groups[index] = group.copyWith(now: name);
-      // final proxy = proxies.firstWhere((element) => element.name == group);
-      // final index = proxies.indexOf(proxy);
-      // proxies[index] = proxy.copyWith(now: name);
       state = (proxies, groups);
-      // ref.read(appConfigProvider.notifier).forceRefresh();
-      ref.invalidate(appConfigProvider);
+      ref.invalidate(clashProxiesProvider);
     }
   }
 }
