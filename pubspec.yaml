@@ -78,6 +78,8 @@ dependencies:
   yaml_edit: ^2.1.1
   contextual_menu: ^0.1.2
   local_notifier: ^0.1.5
+  watcher: ^1.1.0
+  collection: ^1.18.0
 
 dependency_overrides:
   yaml:

@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_tray/system_tray.dart';
 
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:watcher/watcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -29,19 +30,77 @@ import 'utils/exec.dart';
 import 'utils/log.dart';
 import 'utils/math.dart';
 
-final coreStartUpProvider = FutureProvider<bool>((ref) async {
+initCore(WidgetRef ref) async {
   Const.appSupportPath = (await getApplicationSupportDirectory()).path;
-  final exec = await ClashUtil.execCore();
-  if (exec) {
-    Log.i("Core is running on ${Const.clashServerUrl}", "CoreRunning");
-    Log.i(Const.appSupportPath, 'current support path');
-    await ref.read(appConfigProvider.future);
-    // ref.read(clashProxiesProvider.future);
-    return true;
-  } else {
-    return false;
-  }
-});
+  final logFile = File(Const.logPath);
+  late StreamSubscription<WatchEvent> watcherSubscription;
+  watcherSubscription =
+      PollingFileWatcher(Const.logPath, pollingDelay: const Duration(milliseconds: 50)).events.listen((event) {
+    if (logFile.readAsStringSync().contains("RESTful API listening at")) {
+      watcherSubscription.cancel();
+      ref.read(appConfigProvider.future);
+    }
+  });
+  ClashUtil.execCore();
+}
+
+// final coreStartUpProvider = FutureProvider<bool>((ref) async {
+//   Const.appSupportPath = (await getApplicationSupportDirectory()).path;
+//   final exec = await ClashUtil.execCore();
+//   if (exec) {
+//     Log.i("Core is running on ${Const.clashServerUrl}", "CoreRunning");
+//     Log.i(Const.appSupportPath, 'current support path');
+//     await ref.read(appConfigProvider.future);
+//     // ref.read(clashProxiesProvider.future);
+//     return true;
+//   } else {
+//     return false;
+//   }
+// });
+
+// class CoreStartupNotifier extends AsyncNotifier<bool> {
+//   @override
+//   FutureOr<bool> build() async {
+//     Const.appSupportPath = (await getApplicationSupportDirectory()).path;
+//     final logPath = _initLogFile();
+//     final logFile = File(logPath);
+//     late StreamSubscription<WatchEvent> watcherSubscription;
+//     watcherSubscription =
+//         PollingFileWatcher(logPath, pollingDelay: const Duration(milliseconds: 50)).events.listen((event) {
+//       if (logFile.readAsStringSync().contains("RESTful API listening at")) {
+//         watcherSubscription.cancel();
+//       }
+//     });
+//     final exec = await ClashUtil.execCore(logPath);
+//     if (exec) {
+//       Log.i("Core is running on ${Const.clashServerUrl}", "CoreRunning");
+//       Log.i(Const.appSupportPath, 'current support path');
+//       await ref.read(appConfigProvider.future);
+//       // ref.read(clashProxiesProvider.future);
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }
+
+//   static String _initLogFile() {
+//     if (!Directory(Const.logPath).existsSync()) {
+//       Directory(Const.logPath).createSync(recursive: true);
+//     }
+//     final currentTime = DateTime.now().toString();
+//     final file = ("${Const.logPath}/$currentTime.log");
+//     File(file).createSync();
+//     return file;
+//   }
+// }
+
+// final coreStartU
+//
+//pProvider = AsyncNotifierProvider<CoreStartupNotifier, bool>(CoreStartupNotifier.new);
+
+// final coreLoadedProvider = Provider<bool>((ref) => false);
+
+final coreLoadedProvider = StateProvider<bool>((ref) => false);
 
 class AppConfigNotifier extends AsyncNotifier<AppConfig> {
   // late final SharedPreferences prefs;
@@ -110,6 +169,7 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       if (configMap['core']['tun']['enable'] == true) {
         setTun(status: true, updateProfile: false);
       }
+      ref.read(coreLoadedProvider.notifier).state = true;
       return AppConfig.fromJson(configMap);
     }
   }
@@ -403,9 +463,13 @@ final appConfigProvider = AsyncNotifierProvider<AppConfigNotifier, AppConfig>(Ap
 class ClashProxiesNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)> {
   @override
   FutureOr<(List<ClashProxy>, List<ClashProxy>)> build() async {
-    final proxies = await Http.fetchProxies();
-    ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
-    return proxies;
+    try {
+      final proxies = await Http.fetchProxies();
+      ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
+      return proxies;
+    } catch (e) {
+      return (<ClashProxy>[], <ClashProxy>[]);
+    }
   }
 }
 

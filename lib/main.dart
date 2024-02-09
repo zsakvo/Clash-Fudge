@@ -1,9 +1,6 @@
 import 'package:clash_fudge/app_provider.dart';
-import 'package:clash_fudge/components/welcome/load_err.dart';
-import 'package:clash_fudge/components/welcome/loading_core.dart';
 import 'package:clash_fudge/ui/home/home_screen.dart';
 import 'package:clash_fudge/utils/constant.dart';
-import 'package:clash_fudge/utils/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,20 +53,15 @@ class FC extends HookConsumerWidget with WindowListener {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
+      initCore(ref);
       windowManager.addListener(this);
+      return null;
     }, []);
-    final status = ref.watch(coreStartUpProvider);
     return MacosApp(
       title: "Clash-Fudge",
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
-      home: status.when(
-          data: (data) => data ? const HomeScreen() : const Text("启动失败"),
-          error: (error, stackTrace) => LoadError(
-                error: error,
-                stackTrace: stackTrace,
-              ),
-          loading: () => const LoadingCore()),
+      home: const HomeScreen(),
     );
   }
 }

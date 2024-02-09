@@ -7,7 +7,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class RulesNotifier extends AsyncNotifier<List<ClashRule>> {
   @override
   Future<List<ClashRule>> build() async {
-    return (await Http.rules()).map<ClashRule>((e) => ClashRule.fromJson(e)).toList();
+    try {
+      return (await Http.rules()).map<ClashRule>((e) => ClashRule.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
   }
 }
 

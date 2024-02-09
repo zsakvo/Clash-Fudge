@@ -178,7 +178,7 @@ packages:
     source: hosted
     version: "4.10.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -1208,7 +1208,7 @@ packages:
     source: hosted
     version: "13.0.0"
   watcher:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: watcher
       sha256: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"

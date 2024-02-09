@@ -1,3 +1,5 @@
+import 'package:clash_fudge/app_provider.dart';
+import 'package:clash_fudge/components/loading/loading.dart';
 import 'package:clash_fudge/ui/activity/activity_screen.dart';
 import 'package:clash_fudge/ui/config/config_screen.dart';
 import 'package:clash_fudge/ui/connections/connections_screen.dart';
@@ -24,68 +26,74 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentNavIndex = useState(0);
-    return PlatformMenuBar(
-      menus: menuBarItems(),
-      child: MacosWindow(
-          backgroundColor: const Color(0xffebebea),
-          sidebar: Sidebar(
-              topOffset: 36,
-              decoration: const BoxDecoration(color: Color(0xffebebea)),
-              isResizable: false,
-              builder: (context, scrollController) {
-                return SidebarItems(
-                  itemSize: SidebarItemSize.large,
-                  selectedColor: const Color(0xffd8d8d8),
-                  items: [
-                    buildSideBarItem(icon: 'pulse', label: "活动"),
-                    buildSideBarItem(icon: 'function', label: "概览"),
-                    buildGroupLabel("Proxy"),
-                    buildSideBarItem(icon: 'box', label: "策略"),
-                    buildSideBarItem(icon: 'git-merge', label: "规则"),
-                    buildGroupLabel("Core"),
-                    buildSideBarItem(icon: 'terminal', label: "日志"),
-                    buildSideBarItem(icon: 'computer', label: "连接"),
-                    buildGroupLabel("App"),
-                    buildSideBarItem(icon: 'settings', label: "设置"),
-                    // buildSideBarItem(icon: 'more', label: "关于"),
-                  ],
-                  currentIndex: currentNavIndex.value,
-                  onChanged: (value) {
-                    if (![2, 5, 8].contains(value)) {
-                      currentNavIndex.value = value;
-                    }
+    final coreLoaded = ref.watch(coreLoadedProvider);
+    return Stack(
+      children: [
+        PlatformMenuBar(
+          menus: menuBarItems(),
+          child: MacosWindow(
+              backgroundColor: const Color(0xffebebea),
+              sidebar: Sidebar(
+                  topOffset: 36,
+                  decoration: const BoxDecoration(color: Color(0xffebebea)),
+                  isResizable: false,
+                  builder: (context, scrollController) {
+                    return SidebarItems(
+                      itemSize: SidebarItemSize.large,
+                      selectedColor: const Color(0xffd8d8d8),
+                      items: [
+                        buildSideBarItem(icon: 'pulse', label: "活动"),
+                        buildSideBarItem(icon: 'function', label: "概览"),
+                        buildGroupLabel("Proxy"),
+                        buildSideBarItem(icon: 'box', label: "策略"),
+                        buildSideBarItem(icon: 'git-merge', label: "规则"),
+                        buildGroupLabel("Core"),
+                        buildSideBarItem(icon: 'terminal', label: "日志"),
+                        buildSideBarItem(icon: 'computer', label: "连接"),
+                        buildGroupLabel("App"),
+                        buildSideBarItem(icon: 'settings', label: "设置"),
+                        // buildSideBarItem(icon: 'more', label: "关于"),
+                      ],
+                      currentIndex: currentNavIndex.value,
+                      onChanged: (value) {
+                        if (![2, 5, 8].contains(value)) {
+                          currentNavIndex.value = value;
+                        }
+                      },
+                    );
                   },
-                );
-              },
-              minWidth: 200),
-          child: Container(
-            margin: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 8,
-                  offset: const Offset(0, 1), // changes position of shadow
+                  minWidth: 200),
+              child: Container(
+                margin: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: const Offset(0, 1), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: [
-              const ActivityScreen(),
-              const OverviewScreen(),
-              null,
-              const StrategyScreen(),
-              const RulesScreen(),
-              null,
-              const LogsScreen(),
-              const ConnectionsScreen(),
-              null,
-              const ConfigScreen(),
-              const LogsScreen(),
-            ][currentNavIndex.value],
-          )),
+                child: [
+                  const ActivityScreen(),
+                  const OverviewScreen(),
+                  null,
+                  const StrategyScreen(),
+                  const RulesScreen(),
+                  null,
+                  const LogsScreen(),
+                  const ConnectionsScreen(),
+                  null,
+                  const ConfigScreen(),
+                  const LogsScreen(),
+                ][currentNavIndex.value],
+              )),
+        ),
+        if (!coreLoaded) const AppLoading()
+      ],
     );
   }
 

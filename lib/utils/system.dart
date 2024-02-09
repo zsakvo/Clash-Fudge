@@ -27,4 +27,10 @@ class SystemUtil {
     Process.runSync("/usr/bin/osascript",
         ["-e", "do shell script \"$command\" with administrator privileges with prompt \"需要授权以更新权限信息。\""]);
   }
+
+  static testMacPort(int port) {
+    final shell = 'lsof -i:$port';
+    final res = Process.runSync('sh', ['-c', shell]);
+    return res.stdout.toString().isNotEmpty;
+  }
 }

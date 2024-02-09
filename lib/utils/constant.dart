@@ -20,6 +20,10 @@ class Const {
   static String kSystemTrayEventRightClick = "right-click";
   static String kSystemTrayEventClick = "click";
 
+  static String get logPath {
+    return "$appSupportPath/LOG";
+  }
+
   static String get corePath {
     return "$appSupportPath/core/$coreName";
   }
@@ -34,5 +38,17 @@ class Const {
 
   static String get clashServerUrl {
     return "$localhost:$clashPort";
+  }
+
+  static String get execMacOsCoreCommand {
+    final parsedCorePath = corePath.replaceAll(" ", "\\ ");
+    final parsedLogPath = logPath.replaceAll(" ", "\\ ");
+    return 'pkill ${Const.coreName} || true && $parsedCorePath -ext-ctl ${Const.clashServerUrl} > $parsedLogPath 2>&1 &';
+  }
+
+  static String get execMacOsCoreCommandWithRoot {
+    final parsedCorePath = Const.corePath.replaceAll(" ", "\\\\ ");
+    final parsedLaunchPath = Const.launchPath.replaceAll(" ", "\\\\ ");
+    return 'chown root:admin $parsedCorePath\nchown root:admin $parsedLaunchPath\nchmod +sx $parsedCorePath\nchmod +sx $parsedLaunchPath\npkill ${Const.coreName}\n$parsedCorePath -ext-ctl ${Const.clashServerUrl}  > $logPath 2>&1 &';
   }
 }
