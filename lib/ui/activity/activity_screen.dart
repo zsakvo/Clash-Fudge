@@ -203,7 +203,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                       ),
                       InfoLog(
                         subtitle: 'CLASH-FUDGE',
-                        content: '内核已成功启动，RESTFUL-API 地址为 $controlPort',
+                        content: '内核已成功启动，RESTFUL-API 端口为 $controlPort',
                         level: AppLogLevel.SUCCESS,
                       ),
                       const Spacer(),

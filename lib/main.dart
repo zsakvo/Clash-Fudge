@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_tray/system_tray.dart';
@@ -15,6 +16,9 @@ Future<void> main() async {
   await windowManager.ensureInitialized();
   Const.appSupportPath = (await getApplicationSupportDirectory()).path;
   if (!kIsWeb) {
+    await localNotifier.setup(
+      appName: 'cc.zsakvo.clash-fudge',
+    );
     Const.systemTray = SystemTray();
     await Const.systemTray.initSystemTray(iconPath: "assets/icon/systray.png", width: 24);
     WindowOptions windowOptions = const WindowOptions(
