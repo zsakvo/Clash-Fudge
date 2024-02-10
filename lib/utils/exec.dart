@@ -12,7 +12,6 @@ class ClashUtil {
     // 优先尝试 sudo 启动，如果失败，则调用 osascript 启动
     final shRes =
         await Process.run("sudo", [Const.launchPath, Const.coreName, Const.clashPort.toString(), Const.logPath]);
-    Log.e(shRes.stderr.toString().trim());
     if (shRes.stderr.toString().trim().isNotEmpty) {
       kIsRoot = false;
       Log.e(Const.execMacOsCoreCommand);
@@ -109,8 +108,6 @@ class ClashUtil {
     await initBinary();
     await testPort();
     _execMacOs().then((value) {
-      Log.e(value.stderr.toString());
-      Log.e(value.stdout.toString());
       final errText = value.stderr.toString().trim();
       if (errText.isNotEmpty) {
         logFile.readAsString().then((value) {

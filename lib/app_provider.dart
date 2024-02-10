@@ -71,7 +71,9 @@ final coreLoadedProvider = FutureProvider<bool>((ref) async {
 class AppConfigNotifier extends AsyncNotifier<AppConfig> {
   // late final SharedPreferences prefs;
   late File appConfigFile;
+  late File clashConfigFile;
   late String profilePath;
+  String clashConfigContent = "";
   late StreamSubscription<dynamic> socketListener;
   static ProxyManager manager = ProxyManager();
 
@@ -82,9 +84,8 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       if (nextValue != null) {
         setTrayMenus(ref.read(clashProxiesProvider).value?.$2 ?? []);
         appConfigFile.writeAsStringSync(jsonEncode(nextValue.toJson()));
-        ClashFudgeProfile(content: File("${Const.appSupportPath}/config.yaml").readAsStringSync())
-          ..updateValues(nextValue.core.toJson())
-          ..save(Const.appSupportPath);
+        final yaml = ClashFudgeProfile(content: clashConfigContent).updateValues(nextValue.core.toJson());
+        clashConfigFile.writeAsString(yaml.toString());
       }
     });
 
@@ -113,6 +114,13 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     final yamlDir = Directory("$profilePath/yamls");
     if (!yamlDir.existsSync()) yamlDir.createSync(recursive: true);
     appConfigFile = File("$profilePath/appConfig.json");
+    clashConfigFile = File("${Const.appSupportPath}/config.yaml");
+    if (!clashConfigFile.existsSync()) {
+      clashConfigFile.createSync(recursive: true);
+      clashConfigContent = "generate-time: ${DateTime.now().toString()}";
+    } else {
+      clashConfigContent = File("${Const.appSupportPath}/config.yaml").readAsStringSync();
+    }
     if (!appConfigFile.existsSync()) {
       final initialAppConfig = AppConfig(autoStart: autoStart);
       appConfigFile.createSync(recursive: true);
@@ -121,7 +129,6 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     } else {
       final Map<String, dynamic> configMap = jsonDecode(appConfigFile.readAsStringSync());
       configMap['autoStart'] = autoStart;
-
       if (configMap['sysTrayShow'] != SysTrayShow.all.name) socketListener.pause();
       setCurrentProfile();
       if (configMap['isSysProxy'] == true) {
@@ -152,9 +159,8 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
     if (value == true) {
       final coreValue = state.value!.core.copyWith(tun: state.value!.core.tun.copyWith(enable: value));
       appConfigFile.writeAsStringSync(jsonEncode(state.value!.copyWith(core: coreValue)));
-      ClashFudgeProfile(content: File("${Const.appSupportPath}/config.yaml").readAsStringSync())
-        ..updateValues(coreValue.toJson())
-        ..save(Const.appSupportPath);
+      clashConfigFile.writeAsStringSync(
+          ClashFudgeProfile(content: clashConfigContent).updateValues(coreValue.toJson()).toString());
       if (!kIsRoot && (!await _restartCoreWithRoot() || !await watchLog())) {
         return;
       }
@@ -212,9 +218,9 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
   setCurrentProfile({String? name}) async {
     if (name != null) {
       final path = "$profilePath/yamls/$name.yaml";
-      ClashFudgeProfile(content: File(path).readAsStringSync())
-        ..updateValues(state.value!.core.toJson())
-        ..save(Const.appSupportPath);
+      clashConfigContent = File(path).readAsStringSync();
+      clashConfigFile.writeAsStringSync(
+          ClashFudgeProfile(content: clashConfigContent).updateValues(state.value!.core.toJson()).toString());
       update((state) => state.copyWith(currentProfile: name));
     }
     await Http.changeConfig("${Const.appSupportPath}/config.yaml");
