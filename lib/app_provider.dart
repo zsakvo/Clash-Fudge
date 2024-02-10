@@ -128,6 +128,9 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       return initialAppConfig;
     } else {
       final Map<String, dynamic> configMap = jsonDecode(appConfigFile.readAsStringSync());
+      if (Platform.isLinux) {
+        configMap.remove("interface-name");
+      }
       configMap['autoStart'] = autoStart;
       if (configMap['sysTrayShow'] != SysTrayShow.all.name) socketListener.pause();
       setCurrentProfile();

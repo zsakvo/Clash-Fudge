@@ -47,7 +47,7 @@ class ClashUtil {
   static Future testPort() async {
     late bool portUsed;
     final int port = 10000 + Random().nextInt(30000);
-    if (Platform.isMacOS) {
+    if (Platform.isMacOS || Platform.isLinux) {
       final shell = 'lsof -i:$port';
       final res = await Process.run(
         'sh',
