@@ -61,7 +61,8 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
       clashConfigContent = File("${Const.appSupportPath}/config.yaml").readAsStringSync();
     }
     if (!appConfigFile.existsSync()) {
-      final initialAppConfig = AppConfig(autoStart: autoStart);
+      final initialAppConfig = AppConfig(
+          autoStart: autoStart, core: const ClashConfig(interfaceName: null, tun: Tun(stack: TunStack.gvisor)));
       appConfigFile.createSync(recursive: true);
       appConfigFile.writeAsStringSync(jsonEncode(initialAppConfig.toJson()));
       return initialAppConfig;

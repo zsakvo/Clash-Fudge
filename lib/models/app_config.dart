@@ -49,7 +49,7 @@ class ClashConfig with _$ClashConfig {
     @JsonKey(name: 'allow-lan') @Default(false) bool allowLan,
     @JsonKey(name: 'log-level') @Default(LogLevel.info) LogLevel logLevel,
     @JsonKey(name: 'tun') @Default(Tun(enable: false)) Tun tun,
-    @JsonKey(name: 'interface-name') @Default("en0") String interfaceName,
+    @JsonKey(name: 'interface-name') String? interfaceName,
     @JsonKey(name: 'dns') @Default(Dns()) Dns dns,
   }) = _ClashConfig;
 
