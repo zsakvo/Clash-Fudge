@@ -7,6 +7,7 @@
 #include "generated_plugin_registrant.h"
 
 #include <contextual_menu/contextual_menu_plugin.h>
+#include <dynamic_color/dynamic_color_plugin_c_api.h>
 #include <local_notifier/local_notifier_plugin.h>
 #include <protocol_handler_windows/protocol_handler_windows_plugin_c_api.h>
 #include <proxy_manager/proxy_manager_plugin.h>
@@ -19,6 +20,8 @@
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   ContextualMenuPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ContextualMenuPlugin"));
+  DynamicColorPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("DynamicColorPluginCApi"));
   LocalNotifierPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("LocalNotifierPlugin"));
   ProtocolHandlerWindowsPluginCApiRegisterWithRegistrar(

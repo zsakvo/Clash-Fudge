@@ -17,7 +17,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final profiles = ref.watch(clashProfileSubscriberProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
-    final currentProfile = ref.watch(androidAppConfigProvider.select((value) => value.value?.currentProfile));
+    final currentProfileName = ref.watch(androidAppConfigProvider.select((value) => value.value?.currentProfile));
     return Scaffold(
       backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
       body: profiles.when(data: (profiles) {
@@ -34,45 +34,36 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             : ListView.builder(
                 itemBuilder: (context, index) {
                   final profile = profiles[index];
-                  return Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                    child: ListTile(
-                      shape: ShapeBorder.lerp(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), 0.5),
-                      tileColor: currentProfile != profile.name
-                          ? colorScheme.secondaryContainer.withOpacity(0.3)
-                          : colorScheme.secondaryContainer,
-                      contentPadding: const EdgeInsets.only(left: 16, right: 0, top: 8, bottom: 8),
-                      title: Text(
-                        profile.name,
-                        style: textTheme.titleMedium,
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.more_vert),
-                        onPressed: () {
-                          // ref.read(androidAppConfigProvider.notifier).setCurrentProfile(profile.name);
-                        },
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              profile.url == null ? "本地配置" : "远程配置",
-                              style: textTheme.bodySmall,
-                            ),
+                  return RadioListTile.adaptive(
+                    contentPadding: const EdgeInsets.only(left: 16, right: 0, top: 8, bottom: 8),
+                    title: Text(
+                      profile.name,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    value: profile.name,
+                    groupValue: currentProfileName,
+                    secondary: IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+                    onChanged: (value) {
+                      ref.read(androidAppConfigProvider.notifier).setCurrentProfile(name: profile.name);
+                    },
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            profile.url == null ? "本地配置" : "远程配置",
+                            style: textTheme.bodyMedium,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Text(
-                              "共${profile.proxiesNum}个节点",
-                              style: textTheme.bodySmall,
-                            ),
-                          )
-                        ],
-                      ),
-                      onTap: () => ref.read(androidAppConfigProvider.notifier).setCurrentProfile(name: profile.name),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4, bottom: 4),
+                          child: Text(
+                            "共${profile.proxiesNum}个节点",
+                            style: textTheme.bodyMedium,
+                          ),
+                        )
+                      ],
                     ),
                   );
                 },
@@ -93,17 +84,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: CircularProgressIndicator(),
         );
       }),
-      // ? Center(
-      //     child: Padding(
-      //     padding: const EdgeInsets.only(bottom: 24),
-      //     child: Text(
-      //       "没有有效的配置文件",
-      //       style: textTheme.titleLarge,
-      //     ),
-      //   ))
-      // : const CustomScrollView(
-      //     slivers: [],
-      //   ),
       floatingActionButton: MenuAnchor(
         controller: menuController,
         alignmentOffset: const Offset(-194, -180),

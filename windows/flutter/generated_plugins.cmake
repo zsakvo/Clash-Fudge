@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   contextual_menu
+  dynamic_color
   local_notifier
   protocol_handler_windows
   proxy_manager

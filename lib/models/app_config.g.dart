@@ -132,6 +132,7 @@ const _$TunStackEnumMap = {
 _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       enable: json['enable'] as bool? ?? true,
       ipv6: json['ipv6'] as bool? ?? true,
+      listen: json['listen'] as String? ?? "127.0.0.1:51153",
       enhancedMode: json['enhanced-mode'] as String? ?? "fake-ip",
       defaultNameserver: (json['default-nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -161,6 +162,7 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
 Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'enable': instance.enable,
       'ipv6': instance.ipv6,
+      'listen': instance.listen,
       'enhanced-mode': instance.enhancedMode,
       'default-nameserver': instance.defaultNameserver,
       'name-server': instance.nameServer,

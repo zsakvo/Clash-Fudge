@@ -2,11 +2,14 @@
 
 import 'dart:io';
 
+import 'package:clash_fudge/android_app_provider.dart';
 import 'package:clash_fudge/android_route.dart';
 import 'package:clash_fudge/ui/home/macos/home_screen.dart';
 import 'package:clash_fudge/utils/constant.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:local_notifier/local_notifier.dart';
@@ -43,6 +46,9 @@ Future<void> main() async {
       const systemUiOverlayStyle =
           SystemUiOverlayStyle(statusBarColor: Colors.transparent, systemNavigationBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
+    if (Platform.isAndroid) {
+      await FlutterDisplayMode.setHighRefreshRate();
     }
   }
   final container = ProviderContainer();
@@ -95,13 +101,29 @@ class AFC extends HookConsumerWidget {
   const AFC({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      title: "Clash-Fudge",
-      theme: ThemeData.light(
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(useMaterial3: true),
-      routerConfig: AndroidRouter,
-    );
+    // final colorSeed = ref.watch(colorSeedProvider);
+    final colorSeed = ref.watch(appColorProvider).value;
+    return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+      final lightCustom = colorSeed == null
+          ? lightDynamic
+          : ColorScheme.fromSeed(seedColor: Color(colorSeed), brightness: Brightness.light);
+      final darkCustom = colorSeed == null
+          ? darkDynamic
+          : ColorScheme.fromSeed(seedColor: Color(colorSeed), brightness: Brightness.dark);
+      return MaterialApp.router(
+        title: "Clash-Fudge",
+        theme: ThemeData(
+          colorScheme: lightCustom,
+          brightness: Brightness.light,
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: darkCustom,
+          brightness: Brightness.dark,
+          useMaterial3: true,
+        ),
+        routerConfig: AndroidRouter,
+      );
+    });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'clash_profile_subscriber.dart';
@@ -77,6 +78,7 @@ class Dns with _$Dns {
   const factory Dns({
     @JsonKey(name: 'enable') @Default(true) bool enable,
     @JsonKey(name: 'ipv6') @Default(true) bool ipv6,
+    @JsonKey(name: 'listen') @Default("127.0.0.1:51153") String listen,
     @JsonKey(name: 'enhanced-mode') @Default("fake-ip") String enhancedMode,
     @JsonKey(name: 'default-nameserver') @Default(["223.5.5.5", "119.29.29.29"]) List<String> defaultNameserver,
     @JsonKey(name: 'name-server')
@@ -105,3 +107,32 @@ enum LogLevel { debug, info, warning, error, silent }
 enum SysTrayShow { all, speed, icon, none }
 
 enum SysTrayClick { menu, window }
+
+enum PresetColors {
+  red(color: Colors.red),
+  // pink(color: Colors.pink),
+  // purple(color: Colors.purple),
+  deepPurple(color: Colors.deepPurple),
+  // indigo(color: Colors.indigo),
+  blue(color: Colors.blue),
+  // lightBlue(color: Colors.lightBlue),
+  // cyan(color: Colors.cyan),
+  teal(color: Colors.teal),
+  // green(color: Colors.green),
+  lightGreen(color: Colors.lightGreen),
+  // lime(color: Colors.lime),
+  yellow(color: Colors.yellow),
+  // amber(color: Colors.amber),
+  orange(color: Colors.orange),
+  // deepOrange(color: Colors.deepOrange),
+  brown(color: Colors.brown),
+  // blueGrey(color: Colors.blueGrey),
+  // grey(color: Colors.grey)
+  ;
+
+  final Color color;
+
+  const PresetColors({
+    required this.color,
+  });
+}

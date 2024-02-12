@@ -12,6 +12,7 @@ class ClashProxy with _$ClashProxy {
     required List<dynamic> history,
     required String type,
     required bool udp,
+    List<int>? delays,
     int? delay,
     List<String>? all,
     String? now,

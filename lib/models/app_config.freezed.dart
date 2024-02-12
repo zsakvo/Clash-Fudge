@@ -1047,6 +1047,8 @@ mixin _$Dns {
   bool get enable => throw _privateConstructorUsedError;
   @JsonKey(name: 'ipv6')
   bool get ipv6 => throw _privateConstructorUsedError;
+  @JsonKey(name: 'listen')
+  String get listen => throw _privateConstructorUsedError;
   @JsonKey(name: 'enhanced-mode')
   String get enhancedMode => throw _privateConstructorUsedError;
   @JsonKey(name: 'default-nameserver')
@@ -1069,6 +1071,7 @@ abstract class $DnsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'enable') bool enable,
       @JsonKey(name: 'ipv6') bool ipv6,
+      @JsonKey(name: 'listen') String listen,
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'name-server') List<String> nameServer,
@@ -1089,6 +1092,7 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
   $Res call({
     Object? enable = null,
     Object? ipv6 = null,
+    Object? listen = null,
     Object? enhancedMode = null,
     Object? defaultNameserver = null,
     Object? nameServer = null,
@@ -1103,6 +1107,10 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.ipv6
           : ipv6 // ignore: cast_nullable_to_non_nullable
               as bool,
+      listen: null == listen
+          ? _value.listen
+          : listen // ignore: cast_nullable_to_non_nullable
+              as String,
       enhancedMode: null == enhancedMode
           ? _value.enhancedMode
           : enhancedMode // ignore: cast_nullable_to_non_nullable
@@ -1132,6 +1140,7 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'enable') bool enable,
       @JsonKey(name: 'ipv6') bool ipv6,
+      @JsonKey(name: 'listen') String listen,
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'name-server') List<String> nameServer,
@@ -1149,6 +1158,7 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
   $Res call({
     Object? enable = null,
     Object? ipv6 = null,
+    Object? listen = null,
     Object? enhancedMode = null,
     Object? defaultNameserver = null,
     Object? nameServer = null,
@@ -1163,6 +1173,10 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value.ipv6
           : ipv6 // ignore: cast_nullable_to_non_nullable
               as bool,
+      listen: null == listen
+          ? _value.listen
+          : listen // ignore: cast_nullable_to_non_nullable
+              as String,
       enhancedMode: null == enhancedMode
           ? _value.enhancedMode
           : enhancedMode // ignore: cast_nullable_to_non_nullable
@@ -1189,6 +1203,7 @@ class _$DnsImpl extends _Dns {
   const _$DnsImpl(
       {@JsonKey(name: 'enable') this.enable = true,
       @JsonKey(name: 'ipv6') this.ipv6 = true,
+      @JsonKey(name: 'listen') this.listen = "127.0.0.1:51153",
       @JsonKey(name: 'enhanced-mode') this.enhancedMode = "fake-ip",
       @JsonKey(name: 'default-nameserver')
       final List<String> defaultNameserver = const [
@@ -1223,6 +1238,9 @@ class _$DnsImpl extends _Dns {
   @JsonKey(name: 'ipv6')
   final bool ipv6;
   @override
+  @JsonKey(name: 'listen')
+  final String listen;
+  @override
   @JsonKey(name: 'enhanced-mode')
   final String enhancedMode;
   final List<String> _defaultNameserver;
@@ -1255,7 +1273,7 @@ class _$DnsImpl extends _Dns {
 
   @override
   String toString() {
-    return 'Dns(enable: $enable, ipv6: $ipv6, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback)';
+    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback)';
   }
 
   @override
@@ -1265,6 +1283,7 @@ class _$DnsImpl extends _Dns {
             other is _$DnsImpl &&
             (identical(other.enable, enable) || other.enable == enable) &&
             (identical(other.ipv6, ipv6) || other.ipv6 == ipv6) &&
+            (identical(other.listen, listen) || other.listen == listen) &&
             (identical(other.enhancedMode, enhancedMode) ||
                 other.enhancedMode == enhancedMode) &&
             const DeepCollectionEquality()
@@ -1280,6 +1299,7 @@ class _$DnsImpl extends _Dns {
       runtimeType,
       enable,
       ipv6,
+      listen,
       enhancedMode,
       const DeepCollectionEquality().hash(_defaultNameserver),
       const DeepCollectionEquality().hash(_nameServer),
@@ -1303,6 +1323,7 @@ abstract class _Dns extends Dns {
   const factory _Dns(
       {@JsonKey(name: 'enable') final bool enable,
       @JsonKey(name: 'ipv6') final bool ipv6,
+      @JsonKey(name: 'listen') final String listen,
       @JsonKey(name: 'enhanced-mode') final String enhancedMode,
       @JsonKey(name: 'default-nameserver') final List<String> defaultNameserver,
       @JsonKey(name: 'name-server') final List<String> nameServer,
@@ -1317,6 +1338,9 @@ abstract class _Dns extends Dns {
   @override
   @JsonKey(name: 'ipv6')
   bool get ipv6;
+  @override
+  @JsonKey(name: 'listen')
+  String get listen;
   @override
   @JsonKey(name: 'enhanced-mode')
   String get enhancedMode;

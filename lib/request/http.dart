@@ -30,14 +30,14 @@ class Http {
         onError: (DioException error, ErrorInterceptorHandler handler) {
           final path = error.requestOptions.path;
           if (path != '/') {
-            Log.e(
-                [error.requestOptions.path.toString(), error.requestOptions.data], error.requestOptions.uri.toString());
-            final errText = (error.response?.statusCode.toString() ?? "") + (error.response?.data.toString() ?? "");
-            LocalNotification(title: "内核通信错误", body: errText, actions: [LocalNotificationAction(text: "复制")])
-              ..onClick = () {
-                FlutterClipboard.copy(errText);
-              }
-              ..show();
+            Log.e([error.requestOptions.path.toString(), error.requestOptions.data, error.response?.data],
+                error.requestOptions.uri.toString());
+            // final errText = (error.response?.statusCode.toString() ?? "") + (error.response?.data.toString() ?? "");
+            // LocalNotification(title: "内核通信错误", body: errText, actions: [LocalNotificationAction(text: "复制")])
+            //   ..onClick = () {
+            //     FlutterClipboard.copy(errText);
+            //   }
+            //   ..show();
           }
           return handler.next(error);
         },

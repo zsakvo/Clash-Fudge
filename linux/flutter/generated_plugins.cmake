@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   contextual_menu
+  dynamic_color
   local_notifier
   proxy_manager
   screen_retriever

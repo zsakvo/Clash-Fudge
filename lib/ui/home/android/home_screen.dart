@@ -1,5 +1,7 @@
 import 'package:clash_fudge/android_app_provider.dart';
+import 'package:clash_fudge/providers/strategy_provider.dart';
 import 'package:clash_fudge/ui/activity/android/activity_screen.dart';
+import 'package:clash_fudge/ui/config/android/config_screen.dart';
 import 'package:clash_fudge/ui/profile/android/profile_screen.dart';
 import 'package:clash_fudge/ui/strategy/android/strategy_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +43,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onPageChanged: (value) {
           currentIndex.value = value;
         },
+        physics: const NeverScrollableScrollPhysics(),
         children: const [
           ActivityScreen(),
           ProfileScreen(),
           StrategyScreen(),
-          ActivityScreen(),
+          ConfigScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBarTheme(
@@ -70,7 +73,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
             onDestinationSelected: (value) {
               currentIndex.value = value;
-              pageController.animateToPage(value, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+              pageController.jumpToPage(
+                value,
+              );
             },
           )),
     );

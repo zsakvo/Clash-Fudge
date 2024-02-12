@@ -25,6 +25,7 @@ mixin _$ClashProxy {
   List<dynamic> get history => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   bool get udp => throw _privateConstructorUsedError;
+  List<int>? get delays => throw _privateConstructorUsedError;
   int? get delay => throw _privateConstructorUsedError;
   List<String>? get all => throw _privateConstructorUsedError;
   String? get now => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $ClashProxyCopyWith<$Res> {
       List<dynamic> history,
       String type,
       bool udp,
+      List<int>? delays,
       int? delay,
       List<String>? all,
       String? now});
@@ -70,6 +72,7 @@ class _$ClashProxyCopyWithImpl<$Res, $Val extends ClashProxy>
     Object? history = null,
     Object? type = null,
     Object? udp = null,
+    Object? delays = freezed,
     Object? delay = freezed,
     Object? all = freezed,
     Object? now = freezed,
@@ -95,6 +98,10 @@ class _$ClashProxyCopyWithImpl<$Res, $Val extends ClashProxy>
           ? _value.udp
           : udp // ignore: cast_nullable_to_non_nullable
               as bool,
+      delays: freezed == delays
+          ? _value.delays
+          : delays // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       delay: freezed == delay
           ? _value.delay
           : delay // ignore: cast_nullable_to_non_nullable
@@ -125,6 +132,7 @@ abstract class _$$ClashProxyImplCopyWith<$Res>
       List<dynamic> history,
       String type,
       bool udp,
+      List<int>? delays,
       int? delay,
       List<String>? all,
       String? now});
@@ -146,6 +154,7 @@ class __$$ClashProxyImplCopyWithImpl<$Res>
     Object? history = null,
     Object? type = null,
     Object? udp = null,
+    Object? delays = freezed,
     Object? delay = freezed,
     Object? all = freezed,
     Object? now = freezed,
@@ -171,6 +180,10 @@ class __$$ClashProxyImplCopyWithImpl<$Res>
           ? _value.udp
           : udp // ignore: cast_nullable_to_non_nullable
               as bool,
+      delays: freezed == delays
+          ? _value._delays
+          : delays // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       delay: freezed == delay
           ? _value.delay
           : delay // ignore: cast_nullable_to_non_nullable
@@ -197,10 +210,12 @@ class _$ClashProxyImpl extends _ClashProxy {
       required final List<dynamic> history,
       required this.type,
       required this.udp,
+      final List<int>? delays,
       this.delay,
       final List<String>? all,
       this.now})
       : _history = history,
+        _delays = delays,
         _all = all,
         super._();
 
@@ -223,6 +238,16 @@ class _$ClashProxyImpl extends _ClashProxy {
   final String type;
   @override
   final bool udp;
+  final List<int>? _delays;
+  @override
+  List<int>? get delays {
+    final value = _delays;
+    if (value == null) return null;
+    if (_delays is EqualUnmodifiableListView) return _delays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final int? delay;
   final List<String>? _all;
@@ -240,7 +265,7 @@ class _$ClashProxyImpl extends _ClashProxy {
 
   @override
   String toString() {
-    return 'ClashProxy(alive: $alive, name: $name, history: $history, type: $type, udp: $udp, delay: $delay, all: $all, now: $now)';
+    return 'ClashProxy(alive: $alive, name: $name, history: $history, type: $type, udp: $udp, delays: $delays, delay: $delay, all: $all, now: $now)';
   }
 
   @override
@@ -253,6 +278,7 @@ class _$ClashProxyImpl extends _ClashProxy {
             const DeepCollectionEquality().equals(other._history, _history) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.udp, udp) || other.udp == udp) &&
+            const DeepCollectionEquality().equals(other._delays, _delays) &&
             (identical(other.delay, delay) || other.delay == delay) &&
             const DeepCollectionEquality().equals(other._all, _all) &&
             (identical(other.now, now) || other.now == now));
@@ -267,6 +293,7 @@ class _$ClashProxyImpl extends _ClashProxy {
       const DeepCollectionEquality().hash(_history),
       type,
       udp,
+      const DeepCollectionEquality().hash(_delays),
       delay,
       const DeepCollectionEquality().hash(_all),
       now);
@@ -292,6 +319,7 @@ abstract class _ClashProxy extends ClashProxy {
       required final List<dynamic> history,
       required final String type,
       required final bool udp,
+      final List<int>? delays,
       final int? delay,
       final List<String>? all,
       final String? now}) = _$ClashProxyImpl;
@@ -310,6 +338,8 @@ abstract class _ClashProxy extends ClashProxy {
   String get type;
   @override
   bool get udp;
+  @override
+  List<int>? get delays;
   @override
   int? get delay;
   @override

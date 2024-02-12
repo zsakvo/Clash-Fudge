@@ -5,12 +5,17 @@ import 'dart:io';
 import 'package:clash_fudge/bridge/android_core.dart';
 import 'package:clash_fudge/models/app_config.dart';
 import 'package:clash_fudge/models/clash_profile_subscriber.dart';
+import 'package:clash_fudge/models/traffic_speed.dart';
+import 'package:clash_fudge/providers/strategy_provider.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/log.dart';
+import 'package:clash_fudge/utils/math.dart';
 import 'package:clash_fudge/utils/profile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 final androidCoreLoadedProvider = FutureProvider<int?>((ref) async {
   Log.i("startup android core...");
@@ -62,7 +67,14 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
     }
     if (!appConfigFile.existsSync()) {
       final initialAppConfig = AppConfig(
-          autoStart: autoStart, core: const ClashConfig(interfaceName: null, tun: Tun(stack: TunStack.gvisor)));
+          autoStart: autoStart,
+          core: const ClashConfig(
+              interfaceName: null,
+              tproxyPort: 21143,
+              tun: Tun(stack: TunStack.mixed),
+              dns: Dns(
+                enhancedMode: "fake-ip",
+              )));
       appConfigFile.createSync(recursive: true);
       appConfigFile.writeAsStringSync(jsonEncode(initialAppConfig.toJson()));
       return initialAppConfig;
@@ -89,7 +101,8 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
       clashConfigContent = File(path).readAsStringSync();
       clashConfigFile.writeAsStringSync(
           ClashFudgeProfile(content: clashConfigContent).updateValues(state.value!.core.toJson()).toString());
-      update((state) => state.copyWith(currentProfile: name));
+      await update((state) => state.copyWith(currentProfile: name));
+      ref.invalidate(strategeyProvider);
     }
     await Http.changeConfig("${Const.appSupportPath}/config.yaml");
     // ref.invalidate(clashProxiesProvider);
@@ -119,3 +132,33 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
 
 final androidAppConfigProvider =
     AsyncNotifierProvider<AndroidAppConfigNotifier, AppConfig>(AndroidAppConfigNotifier.new);
+
+final trafficProvider = StreamProvider<List<(String, String)>>((ref) async* {
+  final port = await ref.read(androidCoreLoadedProvider.future);
+  final socket = WebSocketChannel.connect(Uri.parse("ws://127.0.0.1:$port/traffic"));
+  ref.onDispose(() => socket.sink.close(status.goingAway));
+  await for (var event in socket.stream) {
+    final ts = TrafficSpeed.fromJson(jsonDecode(event));
+    final down = MathUtil.getFlowTuple(
+      ts.down,
+    );
+    final up = MathUtil.getFlowTuple(ts.up);
+    yield [up, down];
+  }
+});
+
+class AppColorNotifier extends AsyncNotifier<int?> {
+  late final SharedPreferences sp;
+  @override
+  FutureOr<int?> build() async {
+    sp = await SharedPreferences.getInstance();
+    return sp.getInt("app_color");
+  }
+
+  setColor(int seed) {
+    sp.setInt("app_color", seed);
+    update((_) => seed);
+  }
+}
+
+final appColorProvider = AsyncNotifierProvider<AppColorNotifier, int?>(AppColorNotifier.new);
