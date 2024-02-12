@@ -1198,11 +1198,15 @@ class _$DnsImpl extends _Dns {
       @JsonKey(name: 'name-server') final List<String> nameServer = const [
         "https://223.6.6.6/dns-query",
         "tls://dot.pub",
-        "https://dns.alidns.com/dns-query"
+        "https://dns.alidns.com/dns-query",
+        "223.5.5.5",
+        "119.29.29.29"
       ],
       @JsonKey(name: 'fallback') final List<String> fallback = const [
         "https://1.0.0.1/dns-query",
-        "tls://dns.google"
+        "tls://dns.google",
+        "223.5.5.5",
+        "119.29.29.29"
       ]})
       : _defaultNameserver = defaultNameserver,
         _nameServer = nameServer,

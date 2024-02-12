@@ -143,12 +143,19 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
           const [
             "https://223.6.6.6/dns-query",
             "tls://dot.pub",
-            "https://dns.alidns.com/dns-query"
+            "https://dns.alidns.com/dns-query",
+            "223.5.5.5",
+            "119.29.29.29"
           ],
       fallback: (json['fallback'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ["https://1.0.0.1/dns-query", "tls://dns.google"],
+          const [
+            "https://1.0.0.1/dns-query",
+            "tls://dns.google",
+            "223.5.5.5",
+            "119.29.29.29"
+          ],
     );
 
 Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{

@@ -80,9 +80,17 @@ class Dns with _$Dns {
     @JsonKey(name: 'enhanced-mode') @Default("fake-ip") String enhancedMode,
     @JsonKey(name: 'default-nameserver') @Default(["223.5.5.5", "119.29.29.29"]) List<String> defaultNameserver,
     @JsonKey(name: 'name-server')
-    @Default(["https://223.6.6.6/dns-query", "tls://dot.pub", "https://dns.alidns.com/dns-query"])
+    @Default([
+      "https://223.6.6.6/dns-query",
+      "tls://dot.pub",
+      "https://dns.alidns.com/dns-query",
+      "223.5.5.5",
+      "119.29.29.29"
+    ])
     List<String> nameServer,
-    @JsonKey(name: 'fallback') @Default(["https://1.0.0.1/dns-query", "tls://dns.google"]) List<String> fallback,
+    @JsonKey(name: 'fallback')
+    @Default(["https://1.0.0.1/dns-query", "tls://dns.google", "223.5.5.5", "119.29.29.29"])
+    List<String> fallback,
   }) = _Dns;
   const Dns._();
   factory Dns.fromJson(Map<String, dynamic> json) => _$DnsFromJson(json);

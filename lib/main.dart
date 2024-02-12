@@ -1,8 +1,12 @@
-import 'package:clash_fudge/ui/home/home_screen.dart';
+// ignore_for_file: library_prefixes
+
+import 'dart:io';
+
+import 'package:clash_fudge/android_route.dart';
+import 'package:clash_fudge/ui/home/macos/home_screen.dart';
 import 'package:clash_fudge/utils/constant.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:local_notifier/local_notifier.dart';
@@ -13,9 +17,9 @@ import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
   Const.appSupportPath = (await getApplicationSupportDirectory()).path;
-  if (!kIsWeb) {
+  if (kIsDesktop) {
+    await windowManager.ensureInitialized();
     await localNotifier.setup(
       appName: 'cc.zsakvo.clash-fudge',
     );
@@ -32,9 +36,27 @@ Future<void> main() async {
       await windowManager.show();
       await windowManager.focus();
     });
+  } else {
+    // 设置上下顶栏
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
+    if (Platform.isAndroid || Platform.isIOS) {
+      const systemUiOverlayStyle =
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent, systemNavigationBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
   }
   final container = ProviderContainer();
-  runApp(UncontrolledProviderScope(container: container, child: const FC()));
+  runApp(UncontrolledProviderScope(container: container, child: App()));
+}
+
+App() {
+  if (Platform.isMacOS) {
+    return const FC();
+  } else if (Platform.isAndroid) {
+    return const AFC();
+  } else {
+    return const FC();
+  }
 }
 
 class FC extends HookConsumerWidget with WindowListener {
@@ -69,15 +91,17 @@ class FC extends HookConsumerWidget with WindowListener {
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AFC extends HookConsumerWidget {
+  const AFC({super.key});
   @override
-  Widget build(BuildContext context) {
-    return MacosApp(
-      title: "FClash",
-      theme: MacosThemeData.light(),
-      darkTheme: MacosThemeData.dark(),
-      home: const HomeScreen(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      title: "Clash-Fudge",
+      theme: ThemeData.light(
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData.dark(useMaterial3: true),
+      routerConfig: AndroidRouter,
     );
   }
 }

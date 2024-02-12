@@ -1,4 +1,4 @@
-package cc.zsakvo.clash.fudge
+package cc.zsakvo.clash_fudge
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

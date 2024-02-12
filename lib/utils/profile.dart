@@ -30,8 +30,13 @@ class ClashFudgeProfile {
                   "ipv6": true,
                   "enhanced-mode": "fake-ip",
                   "default-nameserver": ["223.5.5.5", "119.29.29.29"],
-                  "name-server": ["https://223.6.6.6/dns-query", "tls://dot.pub", "https://dns.alidns.com/dns-query"],
-                  "fallback": ["https://1.0.0.1/dns-query", "tls://dns.google"],
+                  "name-server": [
+                    "https://223.6.6.6/dns-query",
+                    "tls://dot.pub",
+                    "https://dns.alidns.com/dns-query",
+                    "223.5.5.5"
+                  ],
+                  "fallback": ["https://1.0.0.1/dns-query", "tls://dns.google", "223.5.5.5"],
                   "dns-hijack": ["any:53"]
                 });
       }

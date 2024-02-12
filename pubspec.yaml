@@ -143,3 +143,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+ffigen:
+  name: 'Clash'
+  output: 'lib/bridge/clash_generated_bindings.dart'
+  description: 'Clash.Meta'
+  headers:
+    entry-points:
+      - 'core/android/libclash.h'

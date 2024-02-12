@@ -69,7 +69,6 @@ final coreLoadedProvider = FutureProvider<bool>((ref) async {
 });
 
 class AppConfigNotifier extends AsyncNotifier<AppConfig> {
-  // late final SharedPreferences prefs;
   late File appConfigFile;
   late File clashConfigFile;
   late String profilePath;
