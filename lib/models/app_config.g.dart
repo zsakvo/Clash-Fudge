@@ -70,7 +70,7 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       tun: json['tun'] == null
           ? const Tun(enable: false)
           : Tun.fromJson(json['tun'] as Map<String, dynamic>),
-      interfaceName: json['interface-name'] as String? ?? "en0",
+      interfaceName: json['interface-name'] as String?,
       dns: json['dns'] == null
           ? const Dns()
           : Dns.fromJson(json['dns'] as Map<String, dynamic>),

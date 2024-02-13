@@ -179,7 +179,7 @@ final socksPortProvider = Provider<int>((ref) => ref.watch(appConfigProvider).va
 final redirPortProvider = Provider<int>((ref) => ref.watch(appConfigProvider).value!.core.redirPort);
 final tproxyPortProvider = Provider<int>((ref) => ref.watch(appConfigProvider).value!.core.tproxyPort);
 final mixedPortProvider = Provider<int>((ref) => ref.watch(appConfigProvider).value!.core.mixedPort);
-final interfaceNameProvider = Provider<String>((ref) => ref.watch(appConfigProvider).value!.core.interfaceName);
+final interfaceNameProvider = Provider<String>((ref) => ref.watch(appConfigProvider).value!.core.interfaceName ?? "");
 final ipv6Provider = Provider<bool>((ref) => ref.watch(appConfigProvider).value!.core.ipv6);
 final tunProvider = Provider<Tun>((ref) => ref.watch(appConfigProvider).value!.core.tun);
 

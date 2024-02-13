@@ -390,7 +390,7 @@ mixin _$ClashConfig {
   @JsonKey(name: 'tun')
   Tun get tun => throw _privateConstructorUsedError;
   @JsonKey(name: 'interface-name')
-  String get interfaceName => throw _privateConstructorUsedError;
+  String? get interfaceName => throw _privateConstructorUsedError;
   @JsonKey(name: 'dns')
   Dns get dns => throw _privateConstructorUsedError;
 
@@ -417,7 +417,7 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'allow-lan') bool allowLan,
       @JsonKey(name: 'log-level') LogLevel logLevel,
       @JsonKey(name: 'tun') Tun tun,
-      @JsonKey(name: 'interface-name') String interfaceName,
+      @JsonKey(name: 'interface-name') String? interfaceName,
       @JsonKey(name: 'dns') Dns dns});
 
   $TunCopyWith<$Res> get tun;
@@ -447,7 +447,7 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? allowLan = null,
     Object? logLevel = null,
     Object? tun = null,
-    Object? interfaceName = null,
+    Object? interfaceName = freezed,
     Object? dns = null,
   }) {
     return _then(_value.copyWith(
@@ -491,10 +491,10 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.tun
           : tun // ignore: cast_nullable_to_non_nullable
               as Tun,
-      interfaceName: null == interfaceName
+      interfaceName: freezed == interfaceName
           ? _value.interfaceName
           : interfaceName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       dns: null == dns
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
@@ -538,7 +538,7 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'allow-lan') bool allowLan,
       @JsonKey(name: 'log-level') LogLevel logLevel,
       @JsonKey(name: 'tun') Tun tun,
-      @JsonKey(name: 'interface-name') String interfaceName,
+      @JsonKey(name: 'interface-name') String? interfaceName,
       @JsonKey(name: 'dns') Dns dns});
 
   @override
@@ -568,7 +568,7 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? allowLan = null,
     Object? logLevel = null,
     Object? tun = null,
-    Object? interfaceName = null,
+    Object? interfaceName = freezed,
     Object? dns = null,
   }) {
     return _then(_$ClashConfigImpl(
@@ -612,10 +612,10 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.tun
           : tun // ignore: cast_nullable_to_non_nullable
               as Tun,
-      interfaceName: null == interfaceName
+      interfaceName: freezed == interfaceName
           ? _value.interfaceName
           : interfaceName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       dns: null == dns
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
@@ -639,7 +639,7 @@ class _$ClashConfigImpl extends _ClashConfig {
       @JsonKey(name: 'allow-lan') this.allowLan = false,
       @JsonKey(name: 'log-level') this.logLevel = LogLevel.info,
       @JsonKey(name: 'tun') this.tun = const Tun(enable: false),
-      @JsonKey(name: 'interface-name') this.interfaceName = "en0",
+      @JsonKey(name: 'interface-name') this.interfaceName,
       @JsonKey(name: 'dns') this.dns = const Dns()})
       : super._();
 
@@ -678,7 +678,7 @@ class _$ClashConfigImpl extends _ClashConfig {
   final Tun tun;
   @override
   @JsonKey(name: 'interface-name')
-  final String interfaceName;
+  final String? interfaceName;
   @override
   @JsonKey(name: 'dns')
   final Dns dns;
@@ -757,7 +757,7 @@ abstract class _ClashConfig extends ClashConfig {
       @JsonKey(name: 'allow-lan') final bool allowLan,
       @JsonKey(name: 'log-level') final LogLevel logLevel,
       @JsonKey(name: 'tun') final Tun tun,
-      @JsonKey(name: 'interface-name') final String interfaceName,
+      @JsonKey(name: 'interface-name') final String? interfaceName,
       @JsonKey(name: 'dns') final Dns dns}) = _$ClashConfigImpl;
   const _ClashConfig._() : super._();
 
@@ -795,7 +795,7 @@ abstract class _ClashConfig extends ClashConfig {
   Tun get tun;
   @override
   @JsonKey(name: 'interface-name')
-  String get interfaceName;
+  String? get interfaceName;
   @override
   @JsonKey(name: 'dns')
   Dns get dns;

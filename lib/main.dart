@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clash_fudge/hooks/window_listener.dart';
 import 'package:clash_fudge/ui/activity/activity_provider.dart';
 import 'package:clash_fudge/ui/home/home_screen.dart';
@@ -23,12 +25,12 @@ Future<void> main() async {
     );
     Const.systemTray = SystemTray();
     await Const.systemTray.initSystemTray(iconPath: "assets/icon/systray.png", width: 24);
-    WindowOptions windowOptions = const WindowOptions(
-      size: Size(1070, 670),
-      minimumSize: Size(1070, 670),
+    WindowOptions windowOptions = WindowOptions(
+      size: const Size(1070, 670),
+      minimumSize: const Size(1070, 670),
       skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.hidden,
-      backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+      titleBarStyle: Platform.isMacOS ? TitleBarStyle.hidden : TitleBarStyle.normal,
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
