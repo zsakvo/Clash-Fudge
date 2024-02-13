@@ -42,6 +42,7 @@ class ClashFudgeProfile {
     appConfigValues.forEach((key, value) {
       yaml.update([key], value);
     });
+    return yaml;
   }
 
   save(String path) {
