@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "cc.zsakvo.clash_fudge"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {

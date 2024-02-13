@@ -83,6 +83,7 @@ dependencies:
   flutter_displaymode: ^0.6.0
   dynamic_color: ^1.6.9
   material_color_utilities: ^0.5.0
+  qr_mobile_vision: ^5.0.0
 
 dependency_overrides:
   yaml:

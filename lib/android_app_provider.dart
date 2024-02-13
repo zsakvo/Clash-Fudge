@@ -12,12 +12,20 @@ import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/log.dart';
 import 'package:clash_fudge/utils/math.dart';
 import 'package:clash_fudge/utils/profile.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 final androidCoreLoadedProvider = FutureProvider<int?>((ref) async {
+  final appSupportPath = await getApplicationSupportDirectory();
+  final geoipFile = File("${appSupportPath.path}/geoip.metadb");
+  if (!geoipFile.existsSync()) {
+    final bytes = await rootBundle.load("assets/core/geoip.metadb");
+    geoipFile.writeAsBytesSync(bytes.buffer.asUint8List());
+  }
   Log.i("startup android core...");
   final addr = (await AndroidCore.startRust()) ?? ":-1";
   await AndroidCore.setHomeDir(Const.appSupportPath);
@@ -47,7 +55,9 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
     // Const.clashPort = (ref.watch(androidCoreLoadedProvider).value!);
     try {
       Const.clashPort = await ref.read(androidCoreLoadedProvider.future) ?? 0;
-    } catch (_) {}
+    } catch (err) {
+      Log.e(err);
+    }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -96,6 +106,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
   }
 
   setCurrentProfile({String? name}) async {
+    final port = ref.read(androidCoreLoadedProvider.future);
     if (name != null) {
       final path = "$profilePath/yamls/$name.yaml";
       clashConfigContent = File(path).readAsStringSync();

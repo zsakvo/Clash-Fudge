@@ -1,6 +1,7 @@
 import 'package:clash_fudge/android_app_provider.dart';
 import 'package:clash_fudge/providers/config_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileScreen extends StatefulHookConsumerWidget {
@@ -123,7 +124,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               foregroundColor: MaterialStateProperty.all(colorScheme.onPrimary),
               iconColor: MaterialStateProperty.all(colorScheme.onPrimary),
             ),
-            onPressed: () => {},
+            onPressed: () {
+              context.push("/scan").then((value) {
+                if (value.toString().startsWith("http")) {
+                  showDialog(
+                    useRootNavigator: false,
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("订阅链接"),
+                        content: Text(value.toString()),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // ref.read(clashProfileSubscriberProvider.notifier).addProfile(url: value.toString());
+                              context.pop();
+                            },
+                            child: const Text("添加"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            child: const Text("取消"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  // toast 提示非法
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("不是有效的订阅链接")));
+                }
+              });
+            },
             child: const Text(
               "扫描二维码",
             ),

@@ -7,6 +7,7 @@ import Foundation
 
 import appkit_ui_element_colors
 import contextual_menu
+import device_info_plus
 import dynamic_color
 import local_notifier
 import macos_ui
@@ -24,6 +25,7 @@ import window_manager
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AppkitUiElementColorsPlugin.register(with: registry.registrar(forPlugin: "AppkitUiElementColorsPlugin"))
   ContextualMenuPlugin.register(with: registry.registrar(forPlugin: "ContextualMenuPlugin"))
+  DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
   DynamicColorPlugin.register(with: registry.registrar(forPlugin: "DynamicColorPlugin"))
   LocalNotifierPlugin.register(with: registry.registrar(forPlugin: "LocalNotifierPlugin"))
   MacOSUiPlugin.register(with: registry.registrar(forPlugin: "MacOSUiPlugin"))

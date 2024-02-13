@@ -38,7 +38,8 @@ class ClashProfileSubscriberNotifier extends AutoDisposeAsyncNotifier<List<Clash
     return subArr.map<ClashProfileSubscriber>((e) => ClashProfileSubscriber.fromJson(e)).toList();
   }
 
-  refresh() async {
+  refresh() {
+    state = const AsyncValue.loading();
     final fileNames = Directory(profilePath)
         .listSync()
         .map((e) => e.path.split("/").last)
@@ -53,39 +54,46 @@ class ClashProfileSubscriberNotifier extends AutoDisposeAsyncNotifier<List<Clash
       }
     }
     update((p0) => arr);
-    ref.read(appConfigProvider.notifier).updateSubscribers(newArr);
+    // ref.read(appConfigProvider.notifier).updateSubscribers(newArr);
   }
 
-  importFromUrl({required String url, required String name}) async {
-    final arr = state.value ?? [];
-    var sub = await Http.fetchProfile(
-        profileDirPath: "$profilePath/yamls",
-        subscriber: ClashProfileSubscriber(url: url, name: name, interval: 0, time: DateTime.now()));
-    sub = _parseProfile(sub: sub);
-    final newArr = [...arr, sub];
-    ref.read(appConfigProvider.notifier).updateSubscribers(newArr);
-    update((p0) => newArr);
+  Future importFromUrl({required String url, required String name}) async {
+    state = const AsyncValue.loading();
+    // ref.read(appConfigProvider.notifier).updateSubscribers(newArr);
+    // update((p0) => newArr);
+    state = await AsyncValue.guard(() async {
+      final arr = state.value ?? [];
+      var sub = await Http.fetchProfile(
+          profileDirPath: "$profilePath/yamls",
+          subscriber: ClashProfileSubscriber(url: url, name: name, interval: 0, time: DateTime.now()));
+      sub = _parseProfile(sub: sub);
+      return [...arr, sub];
+    });
   }
 
   importFormFile() async {
-    final yamlsPath = "$profilePath/yamls";
-    final List<ClashProfileSubscriber> newArr = [...state.value ?? []];
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      File file = File(result.files.single.path!);
-      final fileName = file.path.split("/").last;
-      file.copySync("$yamlsPath/$fileName");
-      final profileName = (fileName.split(".")..removeLast()).join(".");
-      final index = newArr.indexWhere((element) => element.name == profileName);
-      final newSub = _parseProfile(name: profileName);
-      if (index != -1) {
-        newArr[index] = newSub;
-      } else {
-        newArr.add(newSub);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final yamlsPath = "$profilePath/yamls";
+      final List<ClashProfileSubscriber> newArr = [...state.value ?? []];
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        File file = File(result.files.single.path!);
+        final fileName = file.path.split("/").last;
+        file.copySync("$yamlsPath/$fileName");
+        final profileName = (fileName.split(".")..removeLast()).join(".");
+        final index = newArr.indexWhere((element) => element.name == profileName);
+        final newSub = _parseProfile(name: profileName);
+        if (index != -1) {
+          newArr[index] = newSub;
+        } else {
+          newArr.add(newSub);
+        }
+        ref.read(_appConfigProvider.notifier).updateSubscribers(newArr);
+        // update((p0) => newArr);
       }
-      ref.read(_appConfigProvider.notifier).updateSubscribers(newArr);
-      update((p0) => newArr);
-    }
+      return newArr;
+    });
   }
 
   ClashProfileSubscriber _parseProfile({String? name, ClashProfileSubscriber? sub}) {
