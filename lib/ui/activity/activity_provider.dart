@@ -40,29 +40,32 @@ class ChartInfo with _$ChartInfo {
 }
 
 final chartProvider = FutureProvider.autoDispose<ChartInfo?>((ref) async {
-  final Snapshot snapshot = (await ref.watch(snapshotProvider.future));
-  if (snapshot.connections == null) {
-    return null;
-  } else {
-    var ups = <int>[];
-    var downs = <int>[];
-    var upLabels = <String>[];
-    var downLabels = <String>[];
-    for (var connection in snapshot.connections!) {
-      ups.add(connection.upload);
-      downs.add(connection.download);
-    }
-    int maxDown = downs.reduce((value, element) => value > element ? value : element);
-    int maxUp = ups.reduce((value, element) => value > element ? value : element);
-    int steps = 5;
-    int stepDown = maxDown ~/ steps;
-    int stepUp = maxUp ~/ steps;
-    for (var i = 1; i <= steps; i++) {
-      upLabels.add(MathUtil.getFlow(stepUp * i));
-      downLabels.add(MathUtil.getFlow(stepDown * i));
-    }
-    return ChartInfo(ups: ups, downs: downs, upLabels: upLabels, downLabels: downLabels);
-  }
+  return ref.watch(snapshotProvider).whenOrNull(
+    data: (data) {
+      var ups = <int>[];
+      var downs = <int>[];
+      var upLabels = <String>[];
+      var downLabels = <String>[];
+      if (data.connections == null) {
+        return ChartInfo(ups: ups, downs: downs, upLabels: upLabels, downLabels: downLabels);
+      } else {
+        for (var connection in data.connections!) {
+          ups.add(connection.upload);
+          downs.add(connection.download);
+        }
+        int maxDown = downs.reduce((value, element) => value > element ? value : element);
+        int maxUp = ups.reduce((value, element) => value > element ? value : element);
+        int steps = 5;
+        int stepDown = maxDown ~/ steps;
+        int stepUp = maxUp ~/ steps;
+        for (var i = 1; i <= steps; i++) {
+          upLabels.add(MathUtil.getFlow(stepUp * i));
+          downLabels.add(MathUtil.getFlow(stepDown * i));
+        }
+        return ChartInfo(ups: ups, downs: downs, upLabels: upLabels, downLabels: downLabels);
+      }
+    },
+  );
 });
 
 final clashMemoryProvider = StreamProvider<(String, String)>((ref) async* {
