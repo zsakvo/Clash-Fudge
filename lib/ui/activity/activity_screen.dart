@@ -1,10 +1,12 @@
 import 'package:clash_fudge/app_provider.dart';
 import 'package:clash_fudge/enums/type.dart';
+import 'package:clash_fudge/hooks/window_listener.dart';
 import 'package:clash_fudge/ui/activity/components/flow_chart.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/math.dart';
 import 'package:flutter/material.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart' hide MacosSegmentedControl, MacosTab;
 
@@ -23,23 +25,20 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   final tabPadding = const EdgeInsets.symmetric(horizontal: 32, vertical: 1);
   @override
   Widget build(BuildContext context) {
+    final closed = useIsWindowClosed();
     final coreLoaded = ref.watch(coreLoadedProvider).value ?? false;
     final typography = MacosTypography.of(context);
-    final snapshot = ref.watch(snapshotProvider);
-    final chart = ref.watch(chartProvider);
-    final isSysProxy =
-        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.isSysProxy)) ?? false : false;
-    final tunEnable =
-        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.tun.enable)) ?? false : false;
+    final snapshot = closed ? null : ref.watch(snapshotProvider);
+    final chart = closed ? null : ref.watch(chartProvider);
+    final isSysProxy = ref.watch(appConfigProvider.select((data) => data.value?.isSysProxy)) ?? false;
+    final tunEnable = ref.watch(appConfigProvider.select((data) => data.value?.core.tun.enable)) ?? false;
     final memoryUsage = ref.watch(clashMemoryProvider);
     final matchProxyDelay = ref.watch(matchProxyDelayProvider);
     final proxyNum = ref.watch(clashProxiesProvider.select((data) => data.value?.$1.length)) ?? 0;
     final rulesNum = ref.watch(rulesProvider.select((data) => data.value?.length));
-    final port = coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.port)) ?? "--" : "--";
-    final socksPort =
-        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.socksPort)) ?? "--" : "--";
-    final mixedPort =
-        coreLoaded ? ref.watch(appConfigProvider.select((data) => data.value?.core.mixedPort)) ?? "--" : "--";
+    final port = ref.watch(appConfigProvider.select((data) => data.value?.core.port)) ?? "--";
+    final socksPort = ref.watch(appConfigProvider.select((data) => data.value?.core.socksPort)) ?? "--";
+    final mixedPort = ref.watch(appConfigProvider.select((data) => data.value?.core.mixedPort)) ?? "--";
     final controlPort = coreLoaded ? Const.clashPort : "--";
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -112,7 +111,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: snapshot.whenOrNull(
+            child: snapshot?.whenOrNull(
               data: (data) {
                 final down = MathUtil.getFlowTuple(data.downloadTotal);
                 final up = MathUtil.getFlowTuple(data.uploadTotal);
@@ -149,11 +148,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                         child: FlowChart(
                           color: const Color(0xFF27B055),
                           label: "上传",
-                          values: coreLoaded ? chart.value?.ups ?? [] : [],
-                          labels: coreLoaded ? chart.value?.upLabels ?? [] : [],
-                          // value: trafficFlow.value?.up ?? 0,
-                          // xScale: 20,
-                          // yScale: 5,
+                          values: chart?.value?.ups ?? [],
+                          labels: chart?.value?.upLabels ?? [],
                         ),
                       ),
                       Expanded(
@@ -161,11 +157,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                         child: FlowChart(
                           color: const Color(0xff2196f3),
                           label: "下载",
-                          values: coreLoaded ? chart.value?.downs ?? [] : [],
-                          labels: coreLoaded ? chart.value?.downLabels ?? [] : [],
-                          // value: trafficFlow.value?.down ?? 0,
-                          // xScale: 20,
-                          // yScale: 5,
+                          values: chart?.value?.downs ?? [],
+                          labels: chart?.value?.downLabels ?? [],
                         ),
                       )
                     ],
@@ -203,7 +196,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                       ),
                       InfoLog(
                         subtitle: 'CLASH-FUDGE',
-                        content: '内核已成功启动，RESTFUL-API 地址为 $controlPort',
+                        content: '内核已成功启动，RESTFUL-API 端口为 $controlPort',
                         level: AppLogLevel.SUCCESS,
                       ),
                       const Spacer(),

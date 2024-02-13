@@ -89,6 +89,8 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       }
     });
 
+    await ref.read(coreLoadedProvider.future);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
