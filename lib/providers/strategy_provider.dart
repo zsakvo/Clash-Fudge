@@ -70,14 +70,14 @@ class ProxyDelayNotifier extends AsyncNotifier<Map<String, int>> {
     return {};
   }
 
-  testGroupProxy(List<String>? proxies) async {
-    if (proxies == null) return;
+  testGroupProxy(String name) async {
+    // if (proxies == null) return;
     state = const AsyncValue.loading();
 
     state = await AsyncValue.guard(() async {
       final url = ref.read(androidAppConfigProvider).value!.testUrl;
       final timeout = ref.read(androidAppConfigProvider).value!.testTimeout;
-      final map = <String, int>{};
+      // final map = <String, int>{};
       // return await Future.wait(proxies.map((e) => Http.proxyPing(name: e, url: url, timeout: timeout)
       //         .then((value) => {"name": e, "delay": value.data["delay"]})
       //         .catchError((_) {
@@ -89,17 +89,18 @@ class ProxyDelayNotifier extends AsyncNotifier<Map<String, int>> {
       //   }
       //   return map;
       // });
-      for (var proxy in proxies) {
-        try {
-          final res = await Http.proxyPing(name: proxy, url: url, timeout: timeout);
-          final delay = res.data["delay"];
-          Log.e(delay);
-          map[proxy] = delay;
-        } catch (_) {
-          map[proxy] = -1;
-        }
-      }
-      return map;
+      // for (var proxy in proxies) {
+      //   try {
+      //     final res = await Http.proxyPing(name: proxy, url: url, timeout: timeout);
+      //     final delay = res.data["delay"];
+      //     // Log.e(delay);
+      //     map[proxy] = delay;
+      //   } catch (_) {
+      //     map[proxy] = -1;
+      //   }
+      // }
+      final res = (await Http.proxyPing(name: name, url: url, timeout: timeout, isGroup: true));
+      return Map<String, int>.from(res.data);
     });
   }
 }

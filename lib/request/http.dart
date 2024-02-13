@@ -135,9 +135,14 @@ class Http {
   static Future<Response<dynamic>> proxyPing({
     required String name,
     int timeout = 5,
+    bool isGroup = false,
     String url = "http://connect.rom.miui.com/generate_204",
   }) async {
-    return _dio.get("/proxies/$name/delay", queryParameters: {"url": url, 'timeout': timeout * 1000});
+    return _dio.get("/${isGroup ? "group" : "proxies"}/$name/delay",
+        queryParameters: {"url": url, 'timeout': timeout * 1000},
+        options: Options(
+          receiveTimeout: const Duration(seconds: 30),
+        ));
   }
 
   static Future rules() async {

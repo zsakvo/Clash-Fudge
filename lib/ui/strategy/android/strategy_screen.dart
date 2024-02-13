@@ -135,7 +135,7 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
                           const SizedBox.shrink(),
                       floatingActionButton: FloatingActionButton(
                         onPressed: () {
-                          delayMap.isLoading ? null : ref.read(proxyDelayProvider.notifier).testGroupProxy(group.all);
+                          delayMap.isLoading ? null : ref.read(proxyDelayProvider.notifier).testGroupProxy(group.name);
                         },
                         elevation: 0,
                         child: delayMap.when(

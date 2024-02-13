@@ -12,6 +12,7 @@ class ClashService : BaseService() {
 
     private fun setupTun() {
         tun = Builder()
+            .setSession("Clash-Fudge")
             .setMtu(mtu)
             .addDnsServer("8.8.8.8")
             .addDnsServer("114.114.114.114")
