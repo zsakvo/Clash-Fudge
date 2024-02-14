@@ -55,6 +55,10 @@ class Const {
     final parsedConfigPath = configPath.replaceAll(" ", "\\\\ ");
     return 'do shell script "chown root:admin $parsedCorePath\nchmod +sx $parsedCorePath\nchmod +sx $parsedLaunchPath\npkill ${Const.coreName}\nsudo $parsedCorePath -f $parsedConfigPath  -ext-ctl ${Const.clashServerUrl}  > $parsedLogPath 2>&1 &" with administrator privileges with prompt "需要 ROOT 授权以使用此功能。"';
   }
+
+  static String get execLinuxCoreCommandWithRoot {
+    return execMacOsCoreCommand;
+  }
 }
 
 bool kIsRoot = false;

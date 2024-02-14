@@ -434,7 +434,14 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
   Future<bool> _restartCoreWithRoot() async {
     File(Const.logPath).writeAsStringSync("");
     Log.e(Const.execMacOsCoreCommandWithRoot);
-    final res = await Process.run("/usr/bin/osascript", ["-e", Const.execMacOsCoreCommandWithRoot]);
+    late final ProcessResult res;
+    if (Platform.isMacOS) {
+      res = await Process.run("/usr/bin/osascript", ["-e", Const.execMacOsCoreCommandWithRoot]);
+    } else if (Platform.isLinux) {
+      res = await Process.run(
+          "pkexec", ['--user', Platform.environment['USER']!, 'sh', '-c', Const.execLinuxCoreCommandWithRoot]);
+    }
+    Log.e(res.stderr.toString(), "___");
     if (res.stderr.toString().trim().isNotEmpty) {
       LocalNotification(
           title: "启动失败", body: res.stderr.toString().trim(), actions: [LocalNotificationAction(text: "复制")])
