@@ -103,13 +103,17 @@ class _IsWindowClosedHookState extends HookState<bool, _IsWindowClosedHook> with
 
   @override
   void onWindowClose() {
-    _isClosed = true;
+    setState(() {
+      _isClosed = true;
+    });
     super.onWindowClose();
   }
 
   @override
   void onWindowFocus() {
-    _isClosed = false;
+    setState(() {
+      _isClosed = false;
+    });
     super.onWindowFocus();
   }
 

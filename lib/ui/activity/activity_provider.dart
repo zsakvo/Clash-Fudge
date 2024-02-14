@@ -5,7 +5,6 @@ import 'package:clash_fudge/models/clash_memory.dart';
 import 'package:clash_fudge/models/clash_snapshot.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
-import 'package:clash_fudge/utils/constant.dart';
 
 import 'package:clash_fudge/utils/math.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,14 +16,11 @@ import 'package:collection/collection.dart';
 part 'activity_provider.freezed.dart';
 
 final snapshotProvider = StreamProvider.autoDispose<Snapshot>((ref) async* {
-  if (ref.watch(coreLoadedProvider).value ?? false) {
-    final socket = WebSocketChannel.connect(Uri.parse("ws://${Const.clashServerUrl}/connections"));
-    ref.onDispose(() => socket.sink.close(status.goingAway));
-    await for (var event in socket.stream) {
-      yield Snapshot.fromJson(jsonDecode(event));
-    }
-  } else {
-    yield const Snapshot(downloadTotal: 0, uploadTotal: 0);
+  final port = await ref.read(coreLoadedProvider.future);
+  final socket = WebSocketChannel.connect(Uri.parse("ws://127.0.0.1:$port/connections"));
+  ref.onDispose(() => socket.sink.close(status.goingAway));
+  await for (var event in socket.stream) {
+    yield Snapshot.fromJson(jsonDecode(event));
   }
 });
 
@@ -69,14 +65,11 @@ final chartProvider = FutureProvider.autoDispose<ChartInfo?>((ref) async {
 });
 
 final clashMemoryProvider = StreamProvider<(String, String)>((ref) async* {
-  if (ref.watch(coreLoadedProvider).value ?? false) {
-    final socket = WebSocketChannel.connect(Uri.parse("ws://${Const.clashServerUrl}/memory"));
-    ref.onDispose(() => socket.sink.close(status.goingAway));
-    await for (var event in socket.stream) {
-      yield MathUtil.getFlowTuple(ClashMemory.fromJson(jsonDecode(event)).inuse ?? 0);
-    }
-  } else {
-    yield ("0", "B");
+  final port = await ref.read(coreLoadedProvider.future);
+  final socket = WebSocketChannel.connect(Uri.parse("ws://127.0.0.1:$port/memory"));
+  ref.onDispose(() => socket.sink.close(status.goingAway));
+  await for (var event in socket.stream) {
+    yield MathUtil.getFlowTuple(ClashMemory.fromJson(jsonDecode(event)).inuse ?? 0);
   }
 });
 

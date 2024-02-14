@@ -94,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         coreLoaded.when(
           data: (value) {
-            return value ? const SizedBox.shrink() : const Text("启动失败");
+            return value > 0 ? const SizedBox.shrink() : const Text("启动失败");
           },
           loading: () {
             return const AppLoading();

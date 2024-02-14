@@ -3,7 +3,6 @@ import 'package:clash_fudge/enums/type.dart';
 import 'package:clash_fudge/hooks/window_listener.dart';
 import 'package:clash_fudge/ui/activity/components/flow_chart.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
-import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/math.dart';
 import 'package:flutter/material.dart';
 
@@ -26,20 +25,19 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     final closed = useIsWindowClosed();
-    final coreLoaded = ref.watch(coreLoadedProvider).value ?? false;
     final typography = MacosTypography.of(context);
     final snapshot = closed ? null : ref.watch(snapshotProvider);
     final chart = closed ? null : ref.watch(chartProvider);
+    final memoryUsage = closed ? null : ref.watch(clashMemoryProvider);
     final isSysProxy = ref.watch(appConfigProvider.select((data) => data.value?.isSysProxy)) ?? false;
     final tunEnable = ref.watch(appConfigProvider.select((data) => data.value?.core.tun.enable)) ?? false;
-    final memoryUsage = ref.watch(clashMemoryProvider);
     final matchProxyDelay = ref.watch(matchProxyDelayProvider);
     final proxyNum = ref.watch(clashProxiesProvider.select((data) => data.value?.$1.length)) ?? 0;
     final rulesNum = ref.watch(rulesProvider.select((data) => data.value?.length));
     final port = ref.watch(appConfigProvider.select((data) => data.value?.core.port)) ?? "--";
     final socksPort = ref.watch(appConfigProvider.select((data) => data.value?.core.socksPort)) ?? "--";
     final mixedPort = ref.watch(appConfigProvider.select((data) => data.value?.core.mixedPort)) ?? "--";
-    final controlPort = coreLoaded ? Const.clashPort : "--";
+    final controlPort = ref.watch(coreLoadedProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Column(
@@ -84,8 +82,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                           padding: const EdgeInsets.only(right: 16),
                           child: InfoCard(
                             title: "内存",
-                            mainText: memoryUsage.value?.$1 ?? "0",
-                            subText: memoryUsage.value?.$2 ?? "B",
+                            mainText: memoryUsage?.value?.$1 ?? "0",
+                            subText: memoryUsage?.value?.$2 ?? "B",
                             iconName: 'dribbble',
                             labelColor: MacosColors.controlAccentColor,
                           ),

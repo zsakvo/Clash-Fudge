@@ -32,8 +32,8 @@ import 'utils/exec.dart';
 import 'utils/log.dart';
 import 'utils/math.dart';
 
-Future<bool> watchLog() async {
-  final Completer<bool> completer = Completer<bool>();
+Future<int> watchLog() async {
+  final Completer<int> completer = Completer<int>();
   final File logFile = File(Const.logPath);
 
   try {
@@ -42,7 +42,7 @@ Future<bool> watchLog() async {
         PollingFileWatcher(Const.logPath, pollingDelay: const Duration(milliseconds: 50)).events.listen((event) async {
       if (await logFile.readAsString().then((content) => content.contains("RESTful API listening at"))) {
         watcherSubscription.cancel();
-        completer.complete(true);
+        completer.complete(Const.clashPort);
       }
     });
 
@@ -50,7 +50,7 @@ Future<bool> watchLog() async {
     Future.delayed(const Duration(seconds: 5), () {
       if (!completer.isCompleted) {
         watcherSubscription.cancel();
-        completer.complete(false);
+        completer.complete(0);
       }
     });
 
@@ -58,11 +58,11 @@ Future<bool> watchLog() async {
     return await completer.future;
   } catch (e) {
     // 处理错误
-    return false;
+    return -1;
   }
 }
 
-final coreLoadedProvider = FutureProvider<bool>((ref) async {
+final coreLoadedProvider = FutureProvider<int>((ref) async {
   File(Const.logPath).writeAsStringSync("");
   ClashUtil.execCore();
   return await watchLog();
@@ -163,7 +163,7 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
       appConfigFile.writeAsStringSync(jsonEncode(state.value!.copyWith(core: coreValue)));
       clashConfigFile.writeAsStringSync(
           ClashFudgeProfile(content: clashConfigContent).updateValues(coreValue.toJson()).toString());
-      if (!kIsRoot && (!await _restartCoreWithRoot() || !await watchLog())) {
+      if (!kIsRoot && (!await _restartCoreWithRoot() || (await watchLog() > 0))) {
         return;
       }
     } else {
