@@ -13,7 +13,7 @@ A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a> GUI based on Flut
 
 | Linux | macOS | Windows | Android |
 | :---: | :---: | :-----: | :-----: |
-|  ➖   |  ✔️   |   ➖    |   ➖    |
+|  🏃‍♀️   |  ✔️   |   ➖    |   🏃‍♀️    |
 
 ## Features
 
@@ -22,6 +22,12 @@ A <a href="https://github.com/MetaCubeX/mihomo">Clash.Meta</a> GUI based on Flut
 - Similar menu bar operation logic as ClashX.
 - Tun Supported.
 - Some additional custom operations.
+
+## Multi-platform
+
+This application is primarily developed and tested on macOS. Currently, it can run on Linux and Android, but there may be some incomplete features or bugs.
+
+**Due to the code not being stable yet, the code for each platform exists in separate branches and has not been merged. After the functionality becomes more stable, they will be merged into the main branch.**
 
 ## Preview
 
