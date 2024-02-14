@@ -78,11 +78,11 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
     if (!appConfigFile.existsSync()) {
       final initialAppConfig = AppConfig(
           autoStart: autoStart,
-          core: const ClashConfig(
+          core: ClashConfig(
               interfaceName: null,
               tproxyPort: 21143,
-              tun: Tun(stack: TunStack.mixed),
-              dns: Dns(
+              tun: Tun(stack: kDefaultTunStack),
+              dns: const Dns(
                 enhancedMode: "fake-ip",
               )));
       appConfigFile.createSync(recursive: true);

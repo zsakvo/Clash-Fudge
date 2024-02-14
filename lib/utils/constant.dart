@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clash_fudge/models/app_config.dart';
 import 'package:system_tray/system_tray.dart';
 
 class Const {
@@ -60,3 +61,5 @@ class Const {
 bool kIsRoot = false;
 
 bool kIsDesktop = Platform.isLinux || Platform.isMacOS || Platform.isWindows;
+
+TunStack kDefaultTunStack = (Platform.isAndroid || Platform.isLinux) ? TunStack.gvisor : TunStack.mixed;
