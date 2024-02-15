@@ -81,6 +81,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
           autoStart: autoStart,
           core: ClashConfig(
               interfaceName: null,
+              tproxyPort: 21143,
               tun: Tun(stack: kDefaultTunStack),
               dns: const Dns(
                 enhancedMode: "fake-ip",
