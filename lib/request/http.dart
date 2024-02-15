@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:clash_fudge/enums/type.dart';
 // import 'package:clash_fudge/models/clash_config.dart.bak';
@@ -10,7 +9,6 @@ import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
 import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/log.dart';
-import 'package:local_notifier/local_notifier.dart';
 
 class Http {
   static final Dio _dio = Dio(BaseOptions(

@@ -1,6 +1,7 @@
 package cc.zsakvo.clash_fudge
 
 import android.app.Service
+import android.net.ProxyInfo
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import cc.zsakvo.mobile.Mobile
@@ -14,8 +15,9 @@ class ClashService : BaseService() {
         tun = Builder()
             .setSession("Clash-Fudge")
             .setMtu(mtu)
+            .setMetered(false)
             .addDnsServer("8.8.8.8")
-            .addDnsServer("114.114.114.114")
+            .addDnsServer("223.5.5.5")
             .addRoute("0.0.0.0", 0)
             .addAddress("198.18.0.1", 30)
             .addDisallowedApplication(packageName)

@@ -20,6 +20,8 @@ class MainActivity: FlutterActivity() {
     private lateinit var cService: BaseService
     private var cBound: Boolean = false
 
+    private var running: Boolean = false
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as BaseService.BaseBinder
@@ -74,6 +76,7 @@ class MainActivity: FlutterActivity() {
                     } else {
                         onActivityResult(REQUEST_CODE, RESULT_OK, null);
                         result.success(true)
+                        running = true
                     }
                 }
 
@@ -82,6 +85,11 @@ class MainActivity: FlutterActivity() {
                         cService.closeVpnService()
                     }
                     result.success(cBound)
+                    running = false
+                }
+
+                "vpnStatus" -> {
+                    result.success(running)
                 }
 
                 "startService" -> {

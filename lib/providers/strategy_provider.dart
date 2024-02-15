@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:clash_fudge/android_app_provider.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
-import 'package:clash_fudge/providers/clash_proxies_provider.dart';
 import 'package:clash_fudge/request/http.dart';
-import 'package:clash_fudge/utils/log.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StrategyNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)> {
+import 'clash_profiles_provider.dart';
+
+class StrategyNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)?> {
   @override
-  FutureOr<(List<ClashProxy>, List<ClashProxy>)> build() async {
-    return await ref.read(clashProxiesProvider.future);
+  FutureOr<(List<ClashProxy>, List<ClashProxy>)?> build() async {
+    final d = ref.watch(clashProxiesProvider);
+    return d.whenOrNull(
+      data: (data) => data,
+    );
   }
 
   testProxy(String name) async {
@@ -21,7 +24,7 @@ class StrategyNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>
       final proxies = state.value!.$1;
       final index = proxies.indexWhere((element) => element.name == name);
       proxies[index] = proxies[index].copyWith(delay: delay);
-      update((p0) => (proxies, p0.$2));
+      update((p0) => (proxies, p0!.$2));
     });
   }
 
@@ -56,13 +59,13 @@ class StrategyNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>
       final index = groups.indexOf(group);
       groups[index] = group.copyWith(now: name);
       update((_) => (proxies, groups));
-      ref.invalidate(clashProxiesProvider);
+      // ref.invalidate(clashProxiesProvider);
     }
   }
 }
 
 final strategeyProvider =
-    AsyncNotifierProvider<StrategyNotifier, (List<ClashProxy>, List<ClashProxy>)>(StrategyNotifier.new);
+    AsyncNotifierProvider<StrategyNotifier, (List<ClashProxy>, List<ClashProxy>)?>(StrategyNotifier.new);
 
 class ProxyDelayNotifier extends AsyncNotifier<Map<String, int>> {
   @override

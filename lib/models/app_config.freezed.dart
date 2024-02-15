@@ -393,6 +393,8 @@ mixin _$ClashConfig {
   String? get interfaceName => throw _privateConstructorUsedError;
   @JsonKey(name: 'dns')
   Dns get dns => throw _privateConstructorUsedError;
+  @JsonKey(name: "profile")
+  Profile? get profile => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -418,10 +420,12 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'log-level') LogLevel logLevel,
       @JsonKey(name: 'tun') Tun tun,
       @JsonKey(name: 'interface-name') String? interfaceName,
-      @JsonKey(name: 'dns') Dns dns});
+      @JsonKey(name: 'dns') Dns dns,
+      @JsonKey(name: "profile") Profile? profile});
 
   $TunCopyWith<$Res> get tun;
   $DnsCopyWith<$Res> get dns;
+  $ProfileCopyWith<$Res>? get profile;
 }
 
 /// @nodoc
@@ -449,6 +453,7 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? tun = null,
     Object? interfaceName = freezed,
     Object? dns = null,
+    Object? profile = freezed,
   }) {
     return _then(_value.copyWith(
       ipv6: null == ipv6
@@ -499,6 +504,10 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as Profile?,
     ) as $Val);
   }
 
@@ -515,6 +524,18 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
   $DnsCopyWith<$Res> get dns {
     return $DnsCopyWith<$Res>(_value.dns, (value) {
       return _then(_value.copyWith(dns: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ProfileCopyWith<$Res>? get profile {
+    if (_value.profile == null) {
+      return null;
+    }
+
+    return $ProfileCopyWith<$Res>(_value.profile!, (value) {
+      return _then(_value.copyWith(profile: value) as $Val);
     });
   }
 }
@@ -539,12 +560,15 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'log-level') LogLevel logLevel,
       @JsonKey(name: 'tun') Tun tun,
       @JsonKey(name: 'interface-name') String? interfaceName,
-      @JsonKey(name: 'dns') Dns dns});
+      @JsonKey(name: 'dns') Dns dns,
+      @JsonKey(name: "profile") Profile? profile});
 
   @override
   $TunCopyWith<$Res> get tun;
   @override
   $DnsCopyWith<$Res> get dns;
+  @override
+  $ProfileCopyWith<$Res>? get profile;
 }
 
 /// @nodoc
@@ -570,6 +594,7 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? tun = null,
     Object? interfaceName = freezed,
     Object? dns = null,
+    Object? profile = freezed,
   }) {
     return _then(_$ClashConfigImpl(
       ipv6: null == ipv6
@@ -620,6 +645,10 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as Profile?,
     ));
   }
 }
@@ -640,7 +669,8 @@ class _$ClashConfigImpl extends _ClashConfig {
       @JsonKey(name: 'log-level') this.logLevel = LogLevel.info,
       @JsonKey(name: 'tun') this.tun = const Tun(enable: false),
       @JsonKey(name: 'interface-name') this.interfaceName,
-      @JsonKey(name: 'dns') this.dns = const Dns()})
+      @JsonKey(name: 'dns') this.dns = const Dns(),
+      @JsonKey(name: "profile") this.profile = const Profile()})
       : super._();
 
   factory _$ClashConfigImpl.fromJson(Map<String, dynamic> json) =>
@@ -682,10 +712,13 @@ class _$ClashConfigImpl extends _ClashConfig {
   @override
   @JsonKey(name: 'dns')
   final Dns dns;
+  @override
+  @JsonKey(name: "profile")
+  final Profile? profile;
 
   @override
   String toString() {
-    return 'ClashConfig(ipv6: $ipv6, mode: $mode, mixedPort: $mixedPort, port: $port, socksPort: $socksPort, redirPort: $redirPort, tproxyPort: $tproxyPort, allowLan: $allowLan, logLevel: $logLevel, tun: $tun, interfaceName: $interfaceName, dns: $dns)';
+    return 'ClashConfig(ipv6: $ipv6, mode: $mode, mixedPort: $mixedPort, port: $port, socksPort: $socksPort, redirPort: $redirPort, tproxyPort: $tproxyPort, allowLan: $allowLan, logLevel: $logLevel, tun: $tun, interfaceName: $interfaceName, dns: $dns, profile: $profile)';
   }
 
   @override
@@ -711,7 +744,8 @@ class _$ClashConfigImpl extends _ClashConfig {
             (identical(other.tun, tun) || other.tun == tun) &&
             (identical(other.interfaceName, interfaceName) ||
                 other.interfaceName == interfaceName) &&
-            (identical(other.dns, dns) || other.dns == dns));
+            (identical(other.dns, dns) || other.dns == dns) &&
+            (identical(other.profile, profile) || other.profile == profile));
   }
 
   @JsonKey(ignore: true)
@@ -729,7 +763,8 @@ class _$ClashConfigImpl extends _ClashConfig {
       logLevel,
       tun,
       interfaceName,
-      dns);
+      dns,
+      profile);
 
   @JsonKey(ignore: true)
   @override
@@ -758,7 +793,8 @@ abstract class _ClashConfig extends ClashConfig {
       @JsonKey(name: 'log-level') final LogLevel logLevel,
       @JsonKey(name: 'tun') final Tun tun,
       @JsonKey(name: 'interface-name') final String? interfaceName,
-      @JsonKey(name: 'dns') final Dns dns}) = _$ClashConfigImpl;
+      @JsonKey(name: 'dns') final Dns dns,
+      @JsonKey(name: "profile") final Profile? profile}) = _$ClashConfigImpl;
   const _ClashConfig._() : super._();
 
   factory _ClashConfig.fromJson(Map<String, dynamic> json) =
@@ -799,6 +835,9 @@ abstract class _ClashConfig extends ClashConfig {
   @override
   @JsonKey(name: 'dns')
   Dns get dns;
+  @override
+  @JsonKey(name: "profile")
+  Profile? get profile;
   @override
   @JsonKey(ignore: true)
   _$$ClashConfigImplCopyWith<_$ClashConfigImpl> get copyWith =>
@@ -1057,6 +1096,8 @@ mixin _$Dns {
   List<String> get nameServer => throw _privateConstructorUsedError;
   @JsonKey(name: 'fallback')
   List<String> get fallback => throw _privateConstructorUsedError;
+  @JsonKey(name: "fake-ip-filter")
+  List<String> get fakeIpFilter => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1075,7 +1116,8 @@ abstract class $DnsCopyWith<$Res> {
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'name-server') List<String> nameServer,
-      @JsonKey(name: 'fallback') List<String> fallback});
+      @JsonKey(name: 'fallback') List<String> fallback,
+      @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
 /// @nodoc
@@ -1097,6 +1139,7 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
     Object? defaultNameserver = null,
     Object? nameServer = null,
     Object? fallback = null,
+    Object? fakeIpFilter = null,
   }) {
     return _then(_value.copyWith(
       enable: null == enable
@@ -1127,6 +1170,10 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.fallback
           : fallback // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      fakeIpFilter: null == fakeIpFilter
+          ? _value.fakeIpFilter
+          : fakeIpFilter // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -1144,7 +1191,8 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'name-server') List<String> nameServer,
-      @JsonKey(name: 'fallback') List<String> fallback});
+      @JsonKey(name: 'fallback') List<String> fallback,
+      @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
 /// @nodoc
@@ -1163,6 +1211,7 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
     Object? defaultNameserver = null,
     Object? nameServer = null,
     Object? fallback = null,
+    Object? fakeIpFilter = null,
   }) {
     return _then(_$DnsImpl(
       enable: null == enable
@@ -1193,6 +1242,10 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value._fallback
           : fallback // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      fakeIpFilter: null == fakeIpFilter
+          ? _value._fakeIpFilter
+          : fakeIpFilter // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -1222,10 +1275,26 @@ class _$DnsImpl extends _Dns {
         "tls://dns.google",
         "223.5.5.5",
         "119.29.29.29"
+      ],
+      @JsonKey(name: "fake-ip-filter") final List<String> fakeIpFilter = const [
+        "localhost.ptlogin2.qq.com",
+        '127.0.0.1',
+        '192.168.0.0/16',
+        '10.0.0.0/8',
+        '172.16.0.0/12',
+        '100.64.0.0/10',
+        '17.0.0.0/8',
+        'localhost',
+        '*.local',
+        'e.crashlytics.com',
+        'captive.apple.com',
+        '::ffff:0:0:0:0/1',
+        '::ffff:128:0:0:0/1'
       ]})
       : _defaultNameserver = defaultNameserver,
         _nameServer = nameServer,
         _fallback = fallback,
+        _fakeIpFilter = fakeIpFilter,
         super._();
 
   factory _$DnsImpl.fromJson(Map<String, dynamic> json) =>
@@ -1271,9 +1340,18 @@ class _$DnsImpl extends _Dns {
     return EqualUnmodifiableListView(_fallback);
   }
 
+  final List<String> _fakeIpFilter;
+  @override
+  @JsonKey(name: "fake-ip-filter")
+  List<String> get fakeIpFilter {
+    if (_fakeIpFilter is EqualUnmodifiableListView) return _fakeIpFilter;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_fakeIpFilter);
+  }
+
   @override
   String toString() {
-    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback)';
+    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback, fakeIpFilter: $fakeIpFilter)';
   }
 
   @override
@@ -1290,7 +1368,9 @@ class _$DnsImpl extends _Dns {
                 .equals(other._defaultNameserver, _defaultNameserver) &&
             const DeepCollectionEquality()
                 .equals(other._nameServer, _nameServer) &&
-            const DeepCollectionEquality().equals(other._fallback, _fallback));
+            const DeepCollectionEquality().equals(other._fallback, _fallback) &&
+            const DeepCollectionEquality()
+                .equals(other._fakeIpFilter, _fakeIpFilter));
   }
 
   @JsonKey(ignore: true)
@@ -1303,7 +1383,8 @@ class _$DnsImpl extends _Dns {
       enhancedMode,
       const DeepCollectionEquality().hash(_defaultNameserver),
       const DeepCollectionEquality().hash(_nameServer),
-      const DeepCollectionEquality().hash(_fallback));
+      const DeepCollectionEquality().hash(_fallback),
+      const DeepCollectionEquality().hash(_fakeIpFilter));
 
   @JsonKey(ignore: true)
   @override
@@ -1327,7 +1408,9 @@ abstract class _Dns extends Dns {
       @JsonKey(name: 'enhanced-mode') final String enhancedMode,
       @JsonKey(name: 'default-nameserver') final List<String> defaultNameserver,
       @JsonKey(name: 'name-server') final List<String> nameServer,
-      @JsonKey(name: 'fallback') final List<String> fallback}) = _$DnsImpl;
+      @JsonKey(name: 'fallback') final List<String> fallback,
+      @JsonKey(name: "fake-ip-filter")
+      final List<String> fakeIpFilter}) = _$DnsImpl;
   const _Dns._() : super._();
 
   factory _Dns.fromJson(Map<String, dynamic> json) = _$DnsImpl.fromJson;
@@ -1354,7 +1437,174 @@ abstract class _Dns extends Dns {
   @JsonKey(name: 'fallback')
   List<String> get fallback;
   @override
+  @JsonKey(name: "fake-ip-filter")
+  List<String> get fakeIpFilter;
+  @override
   @JsonKey(ignore: true)
   _$$DnsImplCopyWith<_$DnsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Profile _$ProfileFromJson(Map<String, dynamic> json) {
+  return _Profile.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Profile {
+  @JsonKey(name: 'store-selected')
+  bool? get storeSelected => throw _privateConstructorUsedError;
+  @JsonKey(name: 'store-fake-ip')
+  bool? get storeFakeIp => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ProfileCopyWith<Profile> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ProfileCopyWith<$Res> {
+  factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
+      _$ProfileCopyWithImpl<$Res, Profile>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'store-selected') bool? storeSelected,
+      @JsonKey(name: 'store-fake-ip') bool? storeFakeIp});
+}
+
+/// @nodoc
+class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
+    implements $ProfileCopyWith<$Res> {
+  _$ProfileCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? storeSelected = freezed,
+    Object? storeFakeIp = freezed,
+  }) {
+    return _then(_value.copyWith(
+      storeSelected: freezed == storeSelected
+          ? _value.storeSelected
+          : storeSelected // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      storeFakeIp: freezed == storeFakeIp
+          ? _value.storeFakeIp
+          : storeFakeIp // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
+  factory _$$ProfileImplCopyWith(
+          _$ProfileImpl value, $Res Function(_$ProfileImpl) then) =
+      __$$ProfileImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'store-selected') bool? storeSelected,
+      @JsonKey(name: 'store-fake-ip') bool? storeFakeIp});
+}
+
+/// @nodoc
+class __$$ProfileImplCopyWithImpl<$Res>
+    extends _$ProfileCopyWithImpl<$Res, _$ProfileImpl>
+    implements _$$ProfileImplCopyWith<$Res> {
+  __$$ProfileImplCopyWithImpl(
+      _$ProfileImpl _value, $Res Function(_$ProfileImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? storeSelected = freezed,
+    Object? storeFakeIp = freezed,
+  }) {
+    return _then(_$ProfileImpl(
+      storeSelected: freezed == storeSelected
+          ? _value.storeSelected
+          : storeSelected // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      storeFakeIp: freezed == storeFakeIp
+          ? _value.storeFakeIp
+          : storeFakeIp // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ProfileImpl implements _Profile {
+  const _$ProfileImpl(
+      {@JsonKey(name: 'store-selected') this.storeSelected,
+      @JsonKey(name: 'store-fake-ip') this.storeFakeIp});
+
+  factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ProfileImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'store-selected')
+  final bool? storeSelected;
+  @override
+  @JsonKey(name: 'store-fake-ip')
+  final bool? storeFakeIp;
+
+  @override
+  String toString() {
+    return 'Profile(storeSelected: $storeSelected, storeFakeIp: $storeFakeIp)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProfileImpl &&
+            (identical(other.storeSelected, storeSelected) ||
+                other.storeSelected == storeSelected) &&
+            (identical(other.storeFakeIp, storeFakeIp) ||
+                other.storeFakeIp == storeFakeIp));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, storeSelected, storeFakeIp);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
+      __$$ProfileImplCopyWithImpl<_$ProfileImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ProfileImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Profile implements Profile {
+  const factory _Profile(
+      {@JsonKey(name: 'store-selected') final bool? storeSelected,
+      @JsonKey(name: 'store-fake-ip') final bool? storeFakeIp}) = _$ProfileImpl;
+
+  factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'store-selected')
+  bool? get storeSelected;
+  @override
+  @JsonKey(name: 'store-fake-ip')
+  bool? get storeFakeIp;
+  @override
+  @JsonKey(ignore: true)
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,5 +1,6 @@
 import 'package:clash_fudge/android_app_provider.dart';
-import 'package:clash_fudge/providers/config_provider.dart';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -43,7 +44,52 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     value: profile.name,
                     groupValue: currentProfileName,
-                    secondary: IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+                    // secondary: IconButton(
+                    //     onPressed: () {
+
+                    //     },
+                    //     icon: const Icon(Icons.more_vert)),
+                    secondary: MenuAnchor(
+                      alignmentOffset: const Offset(-160, -6),
+                      style: MenuStyle(
+                        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 6)),
+                        shape:
+                            MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                      ),
+                      menuChildren: [
+                        MenuItemButton(
+                          style: ButtonStyle(
+                            padding:
+                                MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 12, horizontal: 16)),
+                            minimumSize: MaterialStateProperty.all(const Size(172, 32)),
+                          ),
+                          leadingIcon: const Icon(Icons.edit_outlined),
+                          onPressed: () {
+                            context.push("/edit-sub?url=${profile.url}");
+                          },
+                          child: const Text("编辑"),
+                        ),
+                        MenuItemButton(
+                          style: ButtonStyle(
+                            padding:
+                                MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 12, horizontal: 16)),
+                            minimumSize: MaterialStateProperty.all(const Size(182, 32)),
+                          ),
+                          leadingIcon: const Icon(Icons.delete_outline),
+                          onPressed: () {
+                            // ref.read(clashProfileSubscriberProvider.notifier).removeProfile(name: profile.name);
+                          },
+                          child: const Text("删除"),
+                        ),
+                      ],
+                      builder: (context, controller, child) {
+                        return IconButton(
+                            onPressed: () {
+                              controller.isOpen ? controller.close() : controller.open();
+                            },
+                            icon: const Icon(Icons.more_vert));
+                      },
+                    ),
                     onChanged: (value) {
                       ref.read(androidAppConfigProvider.notifier).setCurrentProfile(name: profile.name);
                     },

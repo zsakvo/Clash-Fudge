@@ -6,6 +6,7 @@ import 'package:clash_fudge/bridge/android_core.dart';
 import 'package:clash_fudge/models/app_config.dart';
 import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/traffic_speed.dart';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
 import 'package:clash_fudge/providers/strategy_provider.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/utils/constant.dart';
@@ -80,7 +81,6 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
           autoStart: autoStart,
           core: ClashConfig(
               interfaceName: null,
-              tproxyPort: 21143,
               tun: Tun(stack: kDefaultTunStack),
               dns: const Dns(
                 enhancedMode: "fake-ip",
@@ -94,6 +94,10 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
       configMap['autoStart'] = autoStart;
       if (configMap['sysTrayShow'] != SysTrayShow.all.name) socketListener.pause();
       setCurrentProfile();
+      if (Platform.isAndroid) {
+        configMap['isSysProxy'] = await AndroidCore.vpnStatus() ?? false;
+        Log.e(configMap['isSysProxy'], 'configMap');
+      }
       if (configMap['isSysProxy'] == true) {
         // final port = configMap['core']['mixed-port'];
         // setSysProxy(status: true, updateProfile: false, port: port);
@@ -106,7 +110,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
   }
 
   setCurrentProfile({String? name}) async {
-    final port = ref.read(androidCoreLoadedProvider.future);
+    ref.invalidate(clashProxiesProvider);
     if (name != null) {
       final path = "$profilePath/yamls/$name.yaml";
       clashConfigContent = File(path).readAsStringSync();
@@ -132,8 +136,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
     } else {
       res = await AndroidCore.stopVpn();
     }
-    Log.e(res, 'vpn status');
-    update((state) => state.copyWith(isSysProxy: value));
+    if (res == true) update((state) => state.copyWith(isSysProxy: value));
   }
 
   updateSubscribers(List<ClashProfileSubscriber> subs) {

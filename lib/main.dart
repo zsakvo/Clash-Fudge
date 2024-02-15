@@ -52,14 +52,15 @@ Future<void> main() async {
     }
   }
   final container = ProviderContainer();
-  runApp(UncontrolledProviderScope(container: container, child: App()));
+  final colorSeed = await container.read(appColorProvider.future);
+  runApp(UncontrolledProviderScope(container: container, child: App(colorSeed: colorSeed)));
 }
 
-App() {
+App({int? colorSeed}) {
   if (Platform.isMacOS) {
     return const FC();
   } else if (Platform.isAndroid) {
-    return const AFC();
+    return AFC(colorSeed: colorSeed);
   } else {
     return const FC();
   }
@@ -98,10 +99,10 @@ class FC extends HookConsumerWidget with WindowListener {
 }
 
 class AFC extends HookConsumerWidget {
-  const AFC({super.key});
+  const AFC({super.key, this.colorSeed});
+  final int? colorSeed;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final colorSeed = ref.watch(colorSeedProvider);
     final colorSeed = ref.watch(appColorProvider).value;
     return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
       final lightCustom = colorSeed == null

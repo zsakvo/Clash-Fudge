@@ -39,20 +39,20 @@ class AppConfig with _$AppConfig {
 @freezed
 class ClashConfig with _$ClashConfig {
   @JsonSerializable(explicitToJson: true)
-  const factory ClashConfig({
-    @Default(false) bool ipv6,
-    @JsonKey(name: 'mode') @Default(Mode.rule) Mode mode,
-    @JsonKey(name: "mixed-port") @Default(17890) int mixedPort,
-    @JsonKey(name: "port") @Default(17891) int port,
-    @JsonKey(name: "socks-port") @Default(17892) int socksPort,
-    @JsonKey(name: 'redir-port') @Default(0) int redirPort,
-    @JsonKey(name: 'tproxy-port') @Default(0) int tproxyPort,
-    @JsonKey(name: 'allow-lan') @Default(false) bool allowLan,
-    @JsonKey(name: 'log-level') @Default(LogLevel.info) LogLevel logLevel,
-    @JsonKey(name: 'tun') @Default(Tun(enable: false)) Tun tun,
-    @JsonKey(name: 'interface-name') String? interfaceName,
-    @JsonKey(name: 'dns') @Default(Dns()) Dns dns,
-  }) = _ClashConfig;
+  const factory ClashConfig(
+      {@Default(false) bool ipv6,
+      @JsonKey(name: 'mode') @Default(Mode.rule) Mode mode,
+      @JsonKey(name: "mixed-port") @Default(17890) int mixedPort,
+      @JsonKey(name: "port") @Default(17891) int port,
+      @JsonKey(name: "socks-port") @Default(17892) int socksPort,
+      @JsonKey(name: 'redir-port') @Default(0) int redirPort,
+      @JsonKey(name: 'tproxy-port') @Default(0) int tproxyPort,
+      @JsonKey(name: 'allow-lan') @Default(false) bool allowLan,
+      @JsonKey(name: 'log-level') @Default(LogLevel.info) LogLevel logLevel,
+      @JsonKey(name: 'tun') @Default(Tun(enable: false)) Tun tun,
+      @JsonKey(name: 'interface-name') String? interfaceName,
+      @JsonKey(name: 'dns') @Default(Dns()) Dns dns,
+      @JsonKey(name: "profile") @Default(Profile()) Profile? profile}) = _ClashConfig;
 
   const ClashConfig._();
 
@@ -93,9 +93,36 @@ class Dns with _$Dns {
     @JsonKey(name: 'fallback')
     @Default(["https://1.0.0.1/dns-query", "tls://dns.google", "223.5.5.5", "119.29.29.29"])
     List<String> fallback,
+    @JsonKey(name: "fake-ip-filter")
+    @Default([
+      "localhost.ptlogin2.qq.com",
+      '127.0.0.1',
+      '192.168.0.0/16',
+      '10.0.0.0/8',
+      '172.16.0.0/12',
+      '100.64.0.0/10',
+      '17.0.0.0/8',
+      'localhost',
+      '*.local',
+      'e.crashlytics.com',
+      'captive.apple.com',
+      '::ffff:0:0:0:0/1',
+      '::ffff:128:0:0:0/1',
+    ])
+    List<String> fakeIpFilter,
   }) = _Dns;
   const Dns._();
   factory Dns.fromJson(Map<String, dynamic> json) => _$DnsFromJson(json);
+}
+
+@freezed
+class Profile with _$Profile {
+  const factory Profile({
+    @JsonKey(name: 'store-selected') bool? storeSelected,
+    @JsonKey(name: 'store-fake-ip') bool? storeFakeIp,
+  }) = _Profile;
+
+  factory Profile.fromJson(Map<String, Object?> json) => _$ProfileFromJson(json);
 }
 
 enum Mode { direct, global, rule }

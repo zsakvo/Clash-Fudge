@@ -22,6 +22,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final currentIndex = useState(0);
     final pageController = usePageController(initialPage: currentIndex.value);
+    final strategey = ref.watch(strategeyProvider);
+    final showStrategy = strategey.whenOrNull(
+          data: (data) => data?.$2.isNotEmpty,
+        ) ??
+        false;
     ref.watch(androidAppConfigProvider);
     return Scaffold(
       appBar: AppBar(
@@ -44,11 +49,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           currentIndex.value = value;
         },
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          ActivityScreen(),
-          ProfileScreen(),
-          StrategyScreen(),
-          ConfigScreen(),
+        children: [
+          const ActivityScreen(),
+          const ProfileScreen(),
+          if (showStrategy) const StrategyScreen(),
+          const ConfigScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBarTheme(
@@ -68,7 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             destinations: [
               buildNavigationDestination(icon: 'pulse', label: "活动", colorScheme: colorScheme),
               buildNavigationDestination(icon: 'box', label: "配置", colorScheme: colorScheme),
-              buildNavigationDestination(icon: 'dribbble', label: "策略", colorScheme: colorScheme),
+              if (showStrategy) buildNavigationDestination(icon: 'dribbble', label: "策略", colorScheme: colorScheme),
               buildNavigationDestination(icon: 'settings', label: "设置", colorScheme: colorScheme),
             ],
             onDestinationSelected: (value) {

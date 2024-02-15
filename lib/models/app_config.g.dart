@@ -74,6 +74,9 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       dns: json['dns'] == null
           ? const Dns()
           : Dns.fromJson(json['dns'] as Map<String, dynamic>),
+      profile: json['profile'] == null
+          ? const Profile()
+          : Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
@@ -90,6 +93,7 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'tun': instance.tun.toJson(),
       'interface-name': instance.interfaceName,
       'dns': instance.dns.toJson(),
+      'profile': instance.profile?.toJson(),
     };
 
 const _$ModeEnumMap = {
@@ -157,6 +161,24 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
             "223.5.5.5",
             "119.29.29.29"
           ],
+      fakeIpFilter: (json['fake-ip-filter'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [
+            "localhost.ptlogin2.qq.com",
+            '127.0.0.1',
+            '192.168.0.0/16',
+            '10.0.0.0/8',
+            '172.16.0.0/12',
+            '100.64.0.0/10',
+            '17.0.0.0/8',
+            'localhost',
+            '*.local',
+            'e.crashlytics.com',
+            'captive.apple.com',
+            '::ffff:0:0:0:0/1',
+            '::ffff:128:0:0:0/1'
+          ],
     );
 
 Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
@@ -167,4 +189,17 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'default-nameserver': instance.defaultNameserver,
       'name-server': instance.nameServer,
       'fallback': instance.fallback,
+      'fake-ip-filter': instance.fakeIpFilter,
+    };
+
+_$ProfileImpl _$$ProfileImplFromJson(Map<String, dynamic> json) =>
+    _$ProfileImpl(
+      storeSelected: json['store-selected'] as bool?,
+      storeFakeIp: json['store-fake-ip'] as bool?,
+    );
+
+Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
+    <String, dynamic>{
+      'store-selected': instance.storeSelected,
+      'store-fake-ip': instance.storeFakeIp,
     };

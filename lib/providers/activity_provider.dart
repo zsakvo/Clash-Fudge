@@ -4,15 +4,12 @@ import 'package:clash_fudge/android_app_provider.dart';
 import 'package:clash_fudge/models/chart_info.dart';
 import 'package:clash_fudge/models/clash_memory.dart';
 import 'package:clash_fudge/models/clash_snapshot.dart';
-import 'package:clash_fudge/request/http.dart';
-import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/utils/constant.dart';
 
 import 'package:clash_fudge/utils/math.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-import 'package:collection/collection.dart';
 
 final snapshotProvider = StreamProvider.autoDispose<Snapshot>((ref) async* {
   if (ref.watch(androidCoreLoadedProvider).value! > 0) {

@@ -2,12 +2,16 @@ import 'package:flutter/services.dart';
 
 class AndroidCore {
   static const MethodChannel _channel = MethodChannel('cc.zsakvo/socks_to_vpn');
-  static Future<dynamic> startVpn() {
-    return _channel.invokeMethod('startVpn');
+  static Future<bool?> startVpn() {
+    return _channel.invokeMethod<bool>('startVpn');
   }
 
-  static Future<dynamic> stopVpn() {
-    return _channel.invokeMethod('stopVpn');
+  static Future<bool?> stopVpn() {
+    return _channel.invokeMethod<bool>('stopVpn');
+  }
+
+  static Future<bool?> vpnStatus() async {
+    return _channel.invokeMethod<bool>('vpnStatus');
   }
 
   static Future<bool?> startService() {

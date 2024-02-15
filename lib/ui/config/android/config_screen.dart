@@ -11,12 +11,12 @@ class ConfigScreen extends StatefulHookConsumerWidget {
 }
 
 class _ConfigScreenState extends ConsumerState<ConfigScreen> {
-  final titleStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
-  final subStyle = TextStyle(fontSize: 14, height: 2);
+  final titleStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+  final subStyle = const TextStyle(fontSize: 14, height: 2);
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
+
     return Scaffold(
       backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
       body: SingleChildScrollView(
