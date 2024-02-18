@@ -145,11 +145,14 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       defaultNameserver: (json['default-nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ["119.29.29.29", "8.8.8.8", "tls://223.5.5.5:853"],
+          const ["119.29.29.29", "8.8.8.8", "https://223.5.5.5/dns-query"],
       nameServer: (json['nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ["tls://dot.pub", "https://dns.alidns.com/dns-query"],
+          const [
+            "https://doh.pub/dns-query",
+            "https://dns.alidns.com/dns-query"
+          ],
       fallback: (json['fallback'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -157,12 +160,32 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       proxyServerNameServer: (json['proxy-server-nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['https://1.0.0.1/dns-query', 'tls://dot.pub'],
+          const ['https://doh.pub/dns-query'],
+      nameserverPolicy: (json['nameserver-policy'] as List<dynamic>?)
+              ?.map((e) => (e as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(k,
+                        (e as List<dynamic>).map((e) => e as String).toList()),
+                  ))
+              .toList() ??
+          const [
+            {
+              "geosite:cn,private": [
+                "https://doh.pub/dns-query",
+                "https://dns.alidns.com/dns-query"
+              ]
+            },
+            {
+              "geosite:geolocation-!cn": [
+                "https://dns.cloudflare.com/dns-query#dns",
+                "https://dns.google/dns-query#dns"
+              ]
+            }
+          ],
       fakeIpFilter: (json['fake-ip-filter'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [
-            "localhost.ptlogin2.qq.com",
+            'localhost.ptlogin2.qq.com',
             '127.0.0.1',
             '192.168.0.0/16',
             '10.0.0.0/8',
@@ -187,6 +210,7 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'nameserver': instance.nameServer,
       'fallback': instance.fallback,
       'proxy-server-nameserver': instance.proxyServerNameServer,
+      'nameserver-policy': instance.nameserverPolicy,
       'fake-ip-filter': instance.fakeIpFilter,
     };
 

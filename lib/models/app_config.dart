@@ -83,21 +83,31 @@ class Dns with _$Dns {
     @JsonKey(name: 'listen') String? listen,
     @JsonKey(name: 'enhanced-mode') @Default("fake-ip") String enhancedMode,
     @JsonKey(name: 'default-nameserver')
-    @Default(["119.29.29.29", "8.8.8.8", "tls://223.5.5.5:853"])
+    @Default(["119.29.29.29", "8.8.8.8", "https://223.5.5.5/dns-query"])
     List<String> defaultNameserver,
     @JsonKey(name: 'nameserver')
     @Default([
-      "tls://dot.pub",
+      "https://doh.pub/dns-query",
       "https://dns.alidns.com/dns-query",
     ])
     List<String> nameServer,
     @JsonKey(name: 'fallback') @Default(["https://1.0.0.1/dns-query", "tls://dns.google"]) List<String> fallback,
     @JsonKey(name: 'proxy-server-nameserver')
-    @Default(['https://1.0.0.1/dns-query', 'tls://dot.pub'])
+    @Default(['https://doh.pub/dns-query'])
     List<String> proxyServerNameServer,
+    @JsonKey(name: 'nameserver-policy')
+    @Default([
+      {
+        "geosite:cn,private": ["https://doh.pub/dns-query", "https://dns.alidns.com/dns-query"]
+      },
+      {
+        "geosite:geolocation-!cn": ["https://dns.cloudflare.com/dns-query#dns", "https://dns.google/dns-query#dns"]
+      }
+    ])
+    List<Map<String, List<String>>> nameserverPolicy,
     @JsonKey(name: "fake-ip-filter")
     @Default([
-      "localhost.ptlogin2.qq.com",
+      'localhost.ptlogin2.qq.com',
       '127.0.0.1',
       '192.168.0.0/16',
       '10.0.0.0/8',
