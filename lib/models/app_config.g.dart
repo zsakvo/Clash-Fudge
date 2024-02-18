@@ -136,31 +136,24 @@ const _$TunStackEnumMap = {
 _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       enable: json['enable'] as bool? ?? true,
       ipv6: json['ipv6'] as bool? ?? true,
-      listen: json['listen'] as String? ?? "127.0.0.1:51153",
+      listen: json['listen'] as String?,
       enhancedMode: json['enhanced-mode'] as String? ?? "fake-ip",
       defaultNameserver: (json['default-nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ["223.5.5.5", "119.29.29.29"],
-      nameServer: (json['name-server'] as List<dynamic>?)
+          const ["119.29.29.29", "8.8.8.8", "tls://223.5.5.5:853"],
+      nameServer: (json['nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [
-            "https://223.6.6.6/dns-query",
-            "tls://dot.pub",
-            "https://dns.alidns.com/dns-query",
-            "223.5.5.5",
-            "119.29.29.29"
-          ],
+          const ["tls://dot.pub", "https://dns.alidns.com/dns-query"],
       fallback: (json['fallback'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [
-            "https://1.0.0.1/dns-query",
-            "tls://dns.google",
-            "223.5.5.5",
-            "119.29.29.29"
-          ],
+          const ["https://1.0.0.1/dns-query", "tls://dns.google"],
+      proxyServerNameServer: (json['proxy-server-nameserver'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ['https://1.0.0.1/dns-query', 'tls://dot.pub'],
       fakeIpFilter: (json['fake-ip-filter'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -187,8 +180,9 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'listen': instance.listen,
       'enhanced-mode': instance.enhancedMode,
       'default-nameserver': instance.defaultNameserver,
-      'name-server': instance.nameServer,
+      'nameserver': instance.nameServer,
       'fallback': instance.fallback,
+      'proxy-server-nameserver': instance.proxyServerNameServer,
       'fake-ip-filter': instance.fakeIpFilter,
     };
 

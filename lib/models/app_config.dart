@@ -78,21 +78,21 @@ class Dns with _$Dns {
   const factory Dns({
     @JsonKey(name: 'enable') @Default(true) bool enable,
     @JsonKey(name: 'ipv6') @Default(true) bool ipv6,
-    @JsonKey(name: 'listen') @Default("127.0.0.1:51153") String listen,
+    @JsonKey(name: 'listen') String? listen,
     @JsonKey(name: 'enhanced-mode') @Default("fake-ip") String enhancedMode,
-    @JsonKey(name: 'default-nameserver') @Default(["223.5.5.5", "119.29.29.29"]) List<String> defaultNameserver,
-    @JsonKey(name: 'name-server')
+    @JsonKey(name: 'default-nameserver')
+    @Default(["119.29.29.29", "8.8.8.8", "tls://223.5.5.5:853"])
+    List<String> defaultNameserver,
+    @JsonKey(name: 'nameserver')
     @Default([
-      "https://223.6.6.6/dns-query",
       "tls://dot.pub",
       "https://dns.alidns.com/dns-query",
-      "223.5.5.5",
-      "119.29.29.29"
     ])
     List<String> nameServer,
-    @JsonKey(name: 'fallback')
-    @Default(["https://1.0.0.1/dns-query", "tls://dns.google", "223.5.5.5", "119.29.29.29"])
-    List<String> fallback,
+    @JsonKey(name: 'fallback') @Default(["https://1.0.0.1/dns-query", "tls://dns.google"]) List<String> fallback,
+    @JsonKey(name: 'proxy-server-nameserver')
+    @Default(['https://1.0.0.1/dns-query', 'tls://dot.pub'])
+    List<String> proxyServerNameServer,
     @JsonKey(name: "fake-ip-filter")
     @Default([
       "localhost.ptlogin2.qq.com",

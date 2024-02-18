@@ -1087,15 +1087,17 @@ mixin _$Dns {
   @JsonKey(name: 'ipv6')
   bool get ipv6 => throw _privateConstructorUsedError;
   @JsonKey(name: 'listen')
-  String get listen => throw _privateConstructorUsedError;
+  String? get listen => throw _privateConstructorUsedError;
   @JsonKey(name: 'enhanced-mode')
   String get enhancedMode => throw _privateConstructorUsedError;
   @JsonKey(name: 'default-nameserver')
   List<String> get defaultNameserver => throw _privateConstructorUsedError;
-  @JsonKey(name: 'name-server')
+  @JsonKey(name: 'nameserver')
   List<String> get nameServer => throw _privateConstructorUsedError;
   @JsonKey(name: 'fallback')
   List<String> get fallback => throw _privateConstructorUsedError;
+  @JsonKey(name: 'proxy-server-nameserver')
+  List<String> get proxyServerNameServer => throw _privateConstructorUsedError;
   @JsonKey(name: "fake-ip-filter")
   List<String> get fakeIpFilter => throw _privateConstructorUsedError;
 
@@ -1112,11 +1114,13 @@ abstract class $DnsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'enable') bool enable,
       @JsonKey(name: 'ipv6') bool ipv6,
-      @JsonKey(name: 'listen') String listen,
+      @JsonKey(name: 'listen') String? listen,
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
-      @JsonKey(name: 'name-server') List<String> nameServer,
+      @JsonKey(name: 'nameserver') List<String> nameServer,
       @JsonKey(name: 'fallback') List<String> fallback,
+      @JsonKey(name: 'proxy-server-nameserver')
+      List<String> proxyServerNameServer,
       @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
@@ -1134,11 +1138,12 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
   $Res call({
     Object? enable = null,
     Object? ipv6 = null,
-    Object? listen = null,
+    Object? listen = freezed,
     Object? enhancedMode = null,
     Object? defaultNameserver = null,
     Object? nameServer = null,
     Object? fallback = null,
+    Object? proxyServerNameServer = null,
     Object? fakeIpFilter = null,
   }) {
     return _then(_value.copyWith(
@@ -1150,10 +1155,10 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.ipv6
           : ipv6 // ignore: cast_nullable_to_non_nullable
               as bool,
-      listen: null == listen
+      listen: freezed == listen
           ? _value.listen
           : listen // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       enhancedMode: null == enhancedMode
           ? _value.enhancedMode
           : enhancedMode // ignore: cast_nullable_to_non_nullable
@@ -1169,6 +1174,10 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
       fallback: null == fallback
           ? _value.fallback
           : fallback // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      proxyServerNameServer: null == proxyServerNameServer
+          ? _value.proxyServerNameServer
+          : proxyServerNameServer // ignore: cast_nullable_to_non_nullable
               as List<String>,
       fakeIpFilter: null == fakeIpFilter
           ? _value.fakeIpFilter
@@ -1187,11 +1196,13 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'enable') bool enable,
       @JsonKey(name: 'ipv6') bool ipv6,
-      @JsonKey(name: 'listen') String listen,
+      @JsonKey(name: 'listen') String? listen,
       @JsonKey(name: 'enhanced-mode') String enhancedMode,
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
-      @JsonKey(name: 'name-server') List<String> nameServer,
+      @JsonKey(name: 'nameserver') List<String> nameServer,
       @JsonKey(name: 'fallback') List<String> fallback,
+      @JsonKey(name: 'proxy-server-nameserver')
+      List<String> proxyServerNameServer,
       @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
@@ -1206,11 +1217,12 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
   $Res call({
     Object? enable = null,
     Object? ipv6 = null,
-    Object? listen = null,
+    Object? listen = freezed,
     Object? enhancedMode = null,
     Object? defaultNameserver = null,
     Object? nameServer = null,
     Object? fallback = null,
+    Object? proxyServerNameServer = null,
     Object? fakeIpFilter = null,
   }) {
     return _then(_$DnsImpl(
@@ -1222,10 +1234,10 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value.ipv6
           : ipv6 // ignore: cast_nullable_to_non_nullable
               as bool,
-      listen: null == listen
+      listen: freezed == listen
           ? _value.listen
           : listen // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       enhancedMode: null == enhancedMode
           ? _value.enhancedMode
           : enhancedMode // ignore: cast_nullable_to_non_nullable
@@ -1242,6 +1254,10 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value._fallback
           : fallback // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      proxyServerNameServer: null == proxyServerNameServer
+          ? _value._proxyServerNameServer
+          : proxyServerNameServer // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       fakeIpFilter: null == fakeIpFilter
           ? _value._fakeIpFilter
           : fakeIpFilter // ignore: cast_nullable_to_non_nullable
@@ -1256,25 +1272,26 @@ class _$DnsImpl extends _Dns {
   const _$DnsImpl(
       {@JsonKey(name: 'enable') this.enable = true,
       @JsonKey(name: 'ipv6') this.ipv6 = true,
-      @JsonKey(name: 'listen') this.listen = "127.0.0.1:51153",
+      @JsonKey(name: 'listen') this.listen,
       @JsonKey(name: 'enhanced-mode') this.enhancedMode = "fake-ip",
       @JsonKey(name: 'default-nameserver')
       final List<String> defaultNameserver = const [
-        "223.5.5.5",
-        "119.29.29.29"
+        "119.29.29.29",
+        "8.8.8.8",
+        "tls://223.5.5.5:853"
       ],
-      @JsonKey(name: 'name-server') final List<String> nameServer = const [
-        "https://223.6.6.6/dns-query",
+      @JsonKey(name: 'nameserver') final List<String> nameServer = const [
         "tls://dot.pub",
-        "https://dns.alidns.com/dns-query",
-        "223.5.5.5",
-        "119.29.29.29"
+        "https://dns.alidns.com/dns-query"
       ],
       @JsonKey(name: 'fallback') final List<String> fallback = const [
         "https://1.0.0.1/dns-query",
-        "tls://dns.google",
-        "223.5.5.5",
-        "119.29.29.29"
+        "tls://dns.google"
+      ],
+      @JsonKey(name: 'proxy-server-nameserver')
+      final List<String> proxyServerNameServer = const [
+        'https://1.0.0.1/dns-query',
+        'tls://dot.pub'
       ],
       @JsonKey(name: "fake-ip-filter") final List<String> fakeIpFilter = const [
         "localhost.ptlogin2.qq.com",
@@ -1294,6 +1311,7 @@ class _$DnsImpl extends _Dns {
       : _defaultNameserver = defaultNameserver,
         _nameServer = nameServer,
         _fallback = fallback,
+        _proxyServerNameServer = proxyServerNameServer,
         _fakeIpFilter = fakeIpFilter,
         super._();
 
@@ -1308,7 +1326,7 @@ class _$DnsImpl extends _Dns {
   final bool ipv6;
   @override
   @JsonKey(name: 'listen')
-  final String listen;
+  final String? listen;
   @override
   @JsonKey(name: 'enhanced-mode')
   final String enhancedMode;
@@ -1324,7 +1342,7 @@ class _$DnsImpl extends _Dns {
 
   final List<String> _nameServer;
   @override
-  @JsonKey(name: 'name-server')
+  @JsonKey(name: 'nameserver')
   List<String> get nameServer {
     if (_nameServer is EqualUnmodifiableListView) return _nameServer;
     // ignore: implicit_dynamic_type
@@ -1340,6 +1358,16 @@ class _$DnsImpl extends _Dns {
     return EqualUnmodifiableListView(_fallback);
   }
 
+  final List<String> _proxyServerNameServer;
+  @override
+  @JsonKey(name: 'proxy-server-nameserver')
+  List<String> get proxyServerNameServer {
+    if (_proxyServerNameServer is EqualUnmodifiableListView)
+      return _proxyServerNameServer;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_proxyServerNameServer);
+  }
+
   final List<String> _fakeIpFilter;
   @override
   @JsonKey(name: "fake-ip-filter")
@@ -1351,7 +1379,7 @@ class _$DnsImpl extends _Dns {
 
   @override
   String toString() {
-    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback, fakeIpFilter: $fakeIpFilter)';
+    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback, proxyServerNameServer: $proxyServerNameServer, fakeIpFilter: $fakeIpFilter)';
   }
 
   @override
@@ -1370,6 +1398,8 @@ class _$DnsImpl extends _Dns {
                 .equals(other._nameServer, _nameServer) &&
             const DeepCollectionEquality().equals(other._fallback, _fallback) &&
             const DeepCollectionEquality()
+                .equals(other._proxyServerNameServer, _proxyServerNameServer) &&
+            const DeepCollectionEquality()
                 .equals(other._fakeIpFilter, _fakeIpFilter));
   }
 
@@ -1384,6 +1414,7 @@ class _$DnsImpl extends _Dns {
       const DeepCollectionEquality().hash(_defaultNameserver),
       const DeepCollectionEquality().hash(_nameServer),
       const DeepCollectionEquality().hash(_fallback),
+      const DeepCollectionEquality().hash(_proxyServerNameServer),
       const DeepCollectionEquality().hash(_fakeIpFilter));
 
   @JsonKey(ignore: true)
@@ -1404,11 +1435,13 @@ abstract class _Dns extends Dns {
   const factory _Dns(
       {@JsonKey(name: 'enable') final bool enable,
       @JsonKey(name: 'ipv6') final bool ipv6,
-      @JsonKey(name: 'listen') final String listen,
+      @JsonKey(name: 'listen') final String? listen,
       @JsonKey(name: 'enhanced-mode') final String enhancedMode,
       @JsonKey(name: 'default-nameserver') final List<String> defaultNameserver,
-      @JsonKey(name: 'name-server') final List<String> nameServer,
+      @JsonKey(name: 'nameserver') final List<String> nameServer,
       @JsonKey(name: 'fallback') final List<String> fallback,
+      @JsonKey(name: 'proxy-server-nameserver')
+      final List<String> proxyServerNameServer,
       @JsonKey(name: "fake-ip-filter")
       final List<String> fakeIpFilter}) = _$DnsImpl;
   const _Dns._() : super._();
@@ -1423,7 +1456,7 @@ abstract class _Dns extends Dns {
   bool get ipv6;
   @override
   @JsonKey(name: 'listen')
-  String get listen;
+  String? get listen;
   @override
   @JsonKey(name: 'enhanced-mode')
   String get enhancedMode;
@@ -1431,11 +1464,14 @@ abstract class _Dns extends Dns {
   @JsonKey(name: 'default-nameserver')
   List<String> get defaultNameserver;
   @override
-  @JsonKey(name: 'name-server')
+  @JsonKey(name: 'nameserver')
   List<String> get nameServer;
   @override
   @JsonKey(name: 'fallback')
   List<String> get fallback;
+  @override
+  @JsonKey(name: 'proxy-server-nameserver')
+  List<String> get proxyServerNameServer;
   @override
   @JsonKey(name: "fake-ip-filter")
   List<String> get fakeIpFilter;
