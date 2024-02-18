@@ -101,6 +101,7 @@ dev_dependencies:
   build_runner: ^2.4.8
   freezed: ^2.4.6
   json_serializable: ^6.7.1
+  yaru: ^1.2.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
