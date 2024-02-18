@@ -22,68 +22,47 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ListTile(
-              titleAlignment: ListTileTitleAlignment.center,
-              horizontalTitleGap: 24,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-              leading: SvgPicture.asset(
-                "assets/icon/palette.svg",
-                width: 26,
-                colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
-              ),
-              title: Text(
-                "主题颜色",
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                "更换应用主题颜色",
-                style: subStyle,
-              ),
-              onTap: () {
-                context.push("/palette");
-              },
+            buildListTile(
+              colorScheme: colorScheme,
+              icon: "palette",
+              title: "主题颜色",
+              subtitle: "更换应用主题颜色",
+              onTap: () => context.push("/palette"),
             ),
-            ListTile(
-              titleAlignment: ListTileTitleAlignment.center,
-              horizontalTitleGap: 24,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-              leading: SvgPicture.asset(
-                "assets/icon/news.svg",
-                width: 26,
-                colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
-              ),
-              title: Text(
-                "最近请求",
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                "查看最近的请求记录",
-                style: subStyle,
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              titleAlignment: ListTileTitleAlignment.center,
-              horizontalTitleGap: 24,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-              leading: SvgPicture.asset(
-                "assets/icon/android.svg",
-                width: 26,
-                colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
-              ),
-              title: Text(
-                "日志查看",
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                "查看内核日志",
-                style: subStyle,
-              ),
-              onTap: () {},
-            ),
+            buildListTile(colorScheme: colorScheme, icon: "news", title: "最近请求", subtitle: "查看最近的请求记录"),
+            buildListTile(colorScheme: colorScheme, icon: "android", title: "日志查看", subtitle: "查看内核日志"),
+            buildListTile(
+                colorScheme: colorScheme, icon: "crosshair", title: "更新 GeoIP 数据库", subtitle: "自带的是精简版，初次安装建议更新一下"),
           ],
         ),
       ),
+    );
+  }
+
+  buildListTile(
+      {required ColorScheme colorScheme,
+      required String icon,
+      required String title,
+      required String subtitle,
+      void Function()? onTap}) {
+    return ListTile(
+      titleAlignment: ListTileTitleAlignment.center,
+      horizontalTitleGap: 24,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      leading: SvgPicture.asset(
+        "assets/icon/$icon.svg",
+        width: 26,
+        colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
+      ),
+      title: Text(
+        title,
+        style: titleStyle,
+      ),
+      subtitle: Text(
+        subtitle,
+        style: subStyle,
+      ),
+      onTap: onTap ?? () {},
     );
   }
 }

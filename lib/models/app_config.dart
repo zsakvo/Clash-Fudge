@@ -52,6 +52,8 @@ class ClashConfig with _$ClashConfig {
       @JsonKey(name: 'tun') @Default(Tun(enable: false)) Tun tun,
       @JsonKey(name: 'interface-name') String? interfaceName,
       @JsonKey(name: 'dns') @Default(Dns()) Dns dns,
+      @JsonKey(name: "keep-alive-interval") @Default(30) int keepAliveInterval,
+      @JsonKey(name: 'unified-delay') @Default(false) bool unifiedDelay,
       @JsonKey(name: "profile") @Default(Profile()) Profile? profile}) = _ClashConfig;
 
   const ClashConfig._();

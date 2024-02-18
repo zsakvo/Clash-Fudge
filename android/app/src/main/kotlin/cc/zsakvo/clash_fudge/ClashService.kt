@@ -18,7 +18,7 @@ class ClashService : BaseService() {
             .setBlocking(false)
             .setMetered(false)
             .addDnsServer("8.8.8.8")
-            //.addDnsServer("223.5.5.5")
+            .addDnsServer("223.5.5.5")
             .addRoute("0.0.0.0", 0)
             .addAddress("198.18.0.1", 30)
             .addDisallowedApplication(packageName)

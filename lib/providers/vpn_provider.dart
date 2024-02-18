@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clash_fudge/bridge/android_core.dart';
+import 'package:clash_fudge/request/http.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class VpnStatusNotifier extends AsyncNotifier<bool> {
@@ -11,6 +12,7 @@ class VpnStatusNotifier extends AsyncNotifier<bool> {
 
   openVpn() async {
     state = const AsyncValue.loading();
+    await Http.flushFakeIp();
     state = await AsyncValue.guard(() async {
       await AndroidCore.startVpn();
       return true;

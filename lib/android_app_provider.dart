@@ -81,6 +81,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
           autoStart: autoStart,
           core: ClashConfig(
               interfaceName: null,
+              keepAliveInterval: Platform.isAndroid ? 1800 : 30,
               tun: Tun(stack: kDefaultTunStack),
               dns: const Dns(
                 enhancedMode: "fake-ip",
@@ -117,7 +118,7 @@ class AndroidAppConfigNotifier extends AsyncNotifier<AppConfig> {
       clashConfigFile.writeAsStringSync(
           ClashFudgeProfile(content: clashConfigContent).updateValues(state.value!.core.toJson()).toString());
       await update((state) => state.copyWith(currentProfile: name));
-      ref.invalidate(strategeyProvider);
+      ref.invalidate(clashProxiesProvider);
     }
     await Http.changeConfig("${Const.appSupportPath}/config.yaml");
     // ref.invalidate(clashProxiesProvider);

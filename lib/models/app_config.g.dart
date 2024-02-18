@@ -74,6 +74,8 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       dns: json['dns'] == null
           ? const Dns()
           : Dns.fromJson(json['dns'] as Map<String, dynamic>),
+      keepAliveInterval: json['keep-alive-interval'] as int? ?? 30,
+      unifiedDelay: json['unified-delay'] as bool? ?? false,
       profile: json['profile'] == null
           ? const Profile()
           : Profile.fromJson(json['profile'] as Map<String, dynamic>),
@@ -93,6 +95,8 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'tun': instance.tun.toJson(),
       'interface-name': instance.interfaceName,
       'dns': instance.dns.toJson(),
+      'keep-alive-interval': instance.keepAliveInterval,
+      'unified-delay': instance.unifiedDelay,
       'profile': instance.profile?.toJson(),
     };
 

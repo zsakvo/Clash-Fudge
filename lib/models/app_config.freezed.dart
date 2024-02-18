@@ -393,6 +393,10 @@ mixin _$ClashConfig {
   String? get interfaceName => throw _privateConstructorUsedError;
   @JsonKey(name: 'dns')
   Dns get dns => throw _privateConstructorUsedError;
+  @JsonKey(name: "keep-alive-interval")
+  int get keepAliveInterval => throw _privateConstructorUsedError;
+  @JsonKey(name: 'unified-delay')
+  bool get unifiedDelay => throw _privateConstructorUsedError;
   @JsonKey(name: "profile")
   Profile? get profile => throw _privateConstructorUsedError;
 
@@ -421,6 +425,8 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'tun') Tun tun,
       @JsonKey(name: 'interface-name') String? interfaceName,
       @JsonKey(name: 'dns') Dns dns,
+      @JsonKey(name: "keep-alive-interval") int keepAliveInterval,
+      @JsonKey(name: 'unified-delay') bool unifiedDelay,
       @JsonKey(name: "profile") Profile? profile});
 
   $TunCopyWith<$Res> get tun;
@@ -453,6 +459,8 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? tun = null,
     Object? interfaceName = freezed,
     Object? dns = null,
+    Object? keepAliveInterval = null,
+    Object? unifiedDelay = null,
     Object? profile = freezed,
   }) {
     return _then(_value.copyWith(
@@ -504,6 +512,14 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      keepAliveInterval: null == keepAliveInterval
+          ? _value.keepAliveInterval
+          : keepAliveInterval // ignore: cast_nullable_to_non_nullable
+              as int,
+      unifiedDelay: null == unifiedDelay
+          ? _value.unifiedDelay
+          : unifiedDelay // ignore: cast_nullable_to_non_nullable
+              as bool,
       profile: freezed == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -561,6 +577,8 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'tun') Tun tun,
       @JsonKey(name: 'interface-name') String? interfaceName,
       @JsonKey(name: 'dns') Dns dns,
+      @JsonKey(name: "keep-alive-interval") int keepAliveInterval,
+      @JsonKey(name: 'unified-delay') bool unifiedDelay,
       @JsonKey(name: "profile") Profile? profile});
 
   @override
@@ -594,6 +612,8 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? tun = null,
     Object? interfaceName = freezed,
     Object? dns = null,
+    Object? keepAliveInterval = null,
+    Object? unifiedDelay = null,
     Object? profile = freezed,
   }) {
     return _then(_$ClashConfigImpl(
@@ -645,6 +665,14 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      keepAliveInterval: null == keepAliveInterval
+          ? _value.keepAliveInterval
+          : keepAliveInterval // ignore: cast_nullable_to_non_nullable
+              as int,
+      unifiedDelay: null == unifiedDelay
+          ? _value.unifiedDelay
+          : unifiedDelay // ignore: cast_nullable_to_non_nullable
+              as bool,
       profile: freezed == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -670,6 +698,8 @@ class _$ClashConfigImpl extends _ClashConfig {
       @JsonKey(name: 'tun') this.tun = const Tun(enable: false),
       @JsonKey(name: 'interface-name') this.interfaceName,
       @JsonKey(name: 'dns') this.dns = const Dns(),
+      @JsonKey(name: "keep-alive-interval") this.keepAliveInterval = 30,
+      @JsonKey(name: 'unified-delay') this.unifiedDelay = false,
       @JsonKey(name: "profile") this.profile = const Profile()})
       : super._();
 
@@ -713,12 +743,18 @@ class _$ClashConfigImpl extends _ClashConfig {
   @JsonKey(name: 'dns')
   final Dns dns;
   @override
+  @JsonKey(name: "keep-alive-interval")
+  final int keepAliveInterval;
+  @override
+  @JsonKey(name: 'unified-delay')
+  final bool unifiedDelay;
+  @override
   @JsonKey(name: "profile")
   final Profile? profile;
 
   @override
   String toString() {
-    return 'ClashConfig(ipv6: $ipv6, mode: $mode, mixedPort: $mixedPort, port: $port, socksPort: $socksPort, redirPort: $redirPort, tproxyPort: $tproxyPort, allowLan: $allowLan, logLevel: $logLevel, tun: $tun, interfaceName: $interfaceName, dns: $dns, profile: $profile)';
+    return 'ClashConfig(ipv6: $ipv6, mode: $mode, mixedPort: $mixedPort, port: $port, socksPort: $socksPort, redirPort: $redirPort, tproxyPort: $tproxyPort, allowLan: $allowLan, logLevel: $logLevel, tun: $tun, interfaceName: $interfaceName, dns: $dns, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, profile: $profile)';
   }
 
   @override
@@ -745,6 +781,10 @@ class _$ClashConfigImpl extends _ClashConfig {
             (identical(other.interfaceName, interfaceName) ||
                 other.interfaceName == interfaceName) &&
             (identical(other.dns, dns) || other.dns == dns) &&
+            (identical(other.keepAliveInterval, keepAliveInterval) ||
+                other.keepAliveInterval == keepAliveInterval) &&
+            (identical(other.unifiedDelay, unifiedDelay) ||
+                other.unifiedDelay == unifiedDelay) &&
             (identical(other.profile, profile) || other.profile == profile));
   }
 
@@ -764,6 +804,8 @@ class _$ClashConfigImpl extends _ClashConfig {
       tun,
       interfaceName,
       dns,
+      keepAliveInterval,
+      unifiedDelay,
       profile);
 
   @JsonKey(ignore: true)
@@ -794,6 +836,8 @@ abstract class _ClashConfig extends ClashConfig {
       @JsonKey(name: 'tun') final Tun tun,
       @JsonKey(name: 'interface-name') final String? interfaceName,
       @JsonKey(name: 'dns') final Dns dns,
+      @JsonKey(name: "keep-alive-interval") final int keepAliveInterval,
+      @JsonKey(name: 'unified-delay') final bool unifiedDelay,
       @JsonKey(name: "profile") final Profile? profile}) = _$ClashConfigImpl;
   const _ClashConfig._() : super._();
 
@@ -835,6 +879,12 @@ abstract class _ClashConfig extends ClashConfig {
   @override
   @JsonKey(name: 'dns')
   Dns get dns;
+  @override
+  @JsonKey(name: "keep-alive-interval")
+  int get keepAliveInterval;
+  @override
+  @JsonKey(name: 'unified-delay')
+  bool get unifiedDelay;
   @override
   @JsonKey(name: "profile")
   Profile? get profile;
