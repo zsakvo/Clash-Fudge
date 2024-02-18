@@ -29,7 +29,7 @@ class ClashService : BaseService() {
         setupTun()
         Mobile.operateTun(true, tun?.detachFd()!!, mtu)
         Log.i("ClashService", "开启VPN服务")
-        startForeground()
+//        startForeground()
     }
 
     override fun closeVpnService() {

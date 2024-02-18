@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:local_notifier/local_notifier.dart';
 import 'package:macos_ui/macos_ui.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
       await windowManager.focus();
     });
   } else {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     // 设置上下顶栏
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
     if (Platform.isAndroid || Platform.isIOS) {
@@ -49,6 +51,13 @@ Future<void> main() async {
     }
     if (Platform.isAndroid) {
       await FlutterDisplayMode.setHighRefreshRate();
+      const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_logo');
+      const InitializationSettings initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+      );
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+      );
     }
   }
   final container = ProviderContainer();

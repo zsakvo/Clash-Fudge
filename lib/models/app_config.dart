@@ -95,16 +95,6 @@ class Dns with _$Dns {
     @JsonKey(name: 'proxy-server-nameserver')
     @Default(['https://doh.pub/dns-query'])
     List<String> proxyServerNameServer,
-    @JsonKey(name: 'nameserver-policy')
-    @Default([
-      {
-        "geosite:cn,private": ["https://doh.pub/dns-query", "https://dns.alidns.com/dns-query"]
-      },
-      {
-        "geosite:geolocation-!cn": ["https://dns.cloudflare.com/dns-query#dns", "https://dns.google/dns-query#dns"]
-      }
-    ])
-    List<Map<String, List<String>>> nameserverPolicy,
     @JsonKey(name: "fake-ip-filter")
     @Default([
       'localhost.ptlogin2.qq.com',

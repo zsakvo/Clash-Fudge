@@ -161,26 +161,6 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
               ?.map((e) => e as String)
               .toList() ??
           const ['https://doh.pub/dns-query'],
-      nameserverPolicy: (json['nameserver-policy'] as List<dynamic>?)
-              ?.map((e) => (e as Map<String, dynamic>).map(
-                    (k, e) => MapEntry(k,
-                        (e as List<dynamic>).map((e) => e as String).toList()),
-                  ))
-              .toList() ??
-          const [
-            {
-              "geosite:cn,private": [
-                "https://doh.pub/dns-query",
-                "https://dns.alidns.com/dns-query"
-              ]
-            },
-            {
-              "geosite:geolocation-!cn": [
-                "https://dns.cloudflare.com/dns-query#dns",
-                "https://dns.google/dns-query#dns"
-              ]
-            }
-          ],
       fakeIpFilter: (json['fake-ip-filter'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -210,7 +190,6 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'nameserver': instance.nameServer,
       'fallback': instance.fallback,
       'proxy-server-nameserver': instance.proxyServerNameServer,
-      'nameserver-policy': instance.nameserverPolicy,
       'fake-ip-filter': instance.fakeIpFilter,
     };
 

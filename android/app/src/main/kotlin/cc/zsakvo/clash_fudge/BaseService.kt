@@ -36,20 +36,20 @@ open class BaseService : VpnService() {
         return binder
     }
 
-    protected fun startForeground() {
-        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        val channel = NotificationChannel(notifyChannelID, notifyChannelName, NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager?.createNotificationChannel(channel)
-
-        val notification = NotificationCompat.Builder(this, notifyChannelID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Clash for Flutter")
-            .setContentText("已在后台启动服务")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-        startForeground(notifyID, notification)
-    }
+//    protected fun startForeground() {
+//        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//
+//        val channel = NotificationChannel(notifyChannelID, notifyChannelName, NotificationManager.IMPORTANCE_DEFAULT)
+//        notificationManager?.createNotificationChannel(channel)
+//
+//        val notification = NotificationCompat.Builder(this, notifyChannelID)
+//            .setSmallIcon(R.mipmap.ic_launcher)
+//            .setContentTitle("Clash for Flutter")
+//            .setContentText("已在后台启动服务")
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .build()
+//        startForeground(notifyID, notification)
+//    }
 
     open fun setupVpnServe() {
         throw RuntimeException("Stub!")
@@ -60,7 +60,7 @@ open class BaseService : VpnService() {
     }
 
     open fun closeVpnService() {
-        notificationManager?.cancel(notifyID)
+//        notificationManager?.cancel(notifyID)
     }
 
     override fun onDestroy() {

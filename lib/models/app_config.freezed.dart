@@ -1148,9 +1148,6 @@ mixin _$Dns {
   List<String> get fallback => throw _privateConstructorUsedError;
   @JsonKey(name: 'proxy-server-nameserver')
   List<String> get proxyServerNameServer => throw _privateConstructorUsedError;
-  @JsonKey(name: 'nameserver-policy')
-  List<Map<String, List<String>>> get nameserverPolicy =>
-      throw _privateConstructorUsedError;
   @JsonKey(name: "fake-ip-filter")
   List<String> get fakeIpFilter => throw _privateConstructorUsedError;
 
@@ -1174,8 +1171,6 @@ abstract class $DnsCopyWith<$Res> {
       @JsonKey(name: 'fallback') List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       List<String> proxyServerNameServer,
-      @JsonKey(name: 'nameserver-policy')
-      List<Map<String, List<String>>> nameserverPolicy,
       @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
@@ -1199,7 +1194,6 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
     Object? nameServer = null,
     Object? fallback = null,
     Object? proxyServerNameServer = null,
-    Object? nameserverPolicy = null,
     Object? fakeIpFilter = null,
   }) {
     return _then(_value.copyWith(
@@ -1235,10 +1229,6 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.proxyServerNameServer
           : proxyServerNameServer // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      nameserverPolicy: null == nameserverPolicy
-          ? _value.nameserverPolicy
-          : nameserverPolicy // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, List<String>>>,
       fakeIpFilter: null == fakeIpFilter
           ? _value.fakeIpFilter
           : fakeIpFilter // ignore: cast_nullable_to_non_nullable
@@ -1263,8 +1253,6 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
       @JsonKey(name: 'fallback') List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       List<String> proxyServerNameServer,
-      @JsonKey(name: 'nameserver-policy')
-      List<Map<String, List<String>>> nameserverPolicy,
       @JsonKey(name: "fake-ip-filter") List<String> fakeIpFilter});
 }
 
@@ -1285,7 +1273,6 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
     Object? nameServer = null,
     Object? fallback = null,
     Object? proxyServerNameServer = null,
-    Object? nameserverPolicy = null,
     Object? fakeIpFilter = null,
   }) {
     return _then(_$DnsImpl(
@@ -1321,10 +1308,6 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value._proxyServerNameServer
           : proxyServerNameServer // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      nameserverPolicy: null == nameserverPolicy
-          ? _value._nameserverPolicy
-          : nameserverPolicy // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, List<String>>>,
       fakeIpFilter: null == fakeIpFilter
           ? _value._fakeIpFilter
           : fakeIpFilter // ignore: cast_nullable_to_non_nullable
@@ -1359,21 +1342,6 @@ class _$DnsImpl extends _Dns {
       final List<String> proxyServerNameServer = const [
         'https://doh.pub/dns-query'
       ],
-      @JsonKey(name: 'nameserver-policy')
-      final List<Map<String, List<String>>> nameserverPolicy = const [
-        {
-          "geosite:cn,private": [
-            "https://doh.pub/dns-query",
-            "https://dns.alidns.com/dns-query"
-          ]
-        },
-        {
-          "geosite:geolocation-!cn": [
-            "https://dns.cloudflare.com/dns-query#dns",
-            "https://dns.google/dns-query#dns"
-          ]
-        }
-      ],
       @JsonKey(name: "fake-ip-filter") final List<String> fakeIpFilter = const [
         'localhost.ptlogin2.qq.com',
         '127.0.0.1',
@@ -1393,7 +1361,6 @@ class _$DnsImpl extends _Dns {
         _nameServer = nameServer,
         _fallback = fallback,
         _proxyServerNameServer = proxyServerNameServer,
-        _nameserverPolicy = nameserverPolicy,
         _fakeIpFilter = fakeIpFilter,
         super._();
 
@@ -1450,16 +1417,6 @@ class _$DnsImpl extends _Dns {
     return EqualUnmodifiableListView(_proxyServerNameServer);
   }
 
-  final List<Map<String, List<String>>> _nameserverPolicy;
-  @override
-  @JsonKey(name: 'nameserver-policy')
-  List<Map<String, List<String>>> get nameserverPolicy {
-    if (_nameserverPolicy is EqualUnmodifiableListView)
-      return _nameserverPolicy;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_nameserverPolicy);
-  }
-
   final List<String> _fakeIpFilter;
   @override
   @JsonKey(name: "fake-ip-filter")
@@ -1471,7 +1428,7 @@ class _$DnsImpl extends _Dns {
 
   @override
   String toString() {
-    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback, proxyServerNameServer: $proxyServerNameServer, nameserverPolicy: $nameserverPolicy, fakeIpFilter: $fakeIpFilter)';
+    return 'Dns(enable: $enable, ipv6: $ipv6, listen: $listen, enhancedMode: $enhancedMode, defaultNameserver: $defaultNameserver, nameServer: $nameServer, fallback: $fallback, proxyServerNameServer: $proxyServerNameServer, fakeIpFilter: $fakeIpFilter)';
   }
 
   @override
@@ -1492,8 +1449,6 @@ class _$DnsImpl extends _Dns {
             const DeepCollectionEquality()
                 .equals(other._proxyServerNameServer, _proxyServerNameServer) &&
             const DeepCollectionEquality()
-                .equals(other._nameserverPolicy, _nameserverPolicy) &&
-            const DeepCollectionEquality()
                 .equals(other._fakeIpFilter, _fakeIpFilter));
   }
 
@@ -1509,7 +1464,6 @@ class _$DnsImpl extends _Dns {
       const DeepCollectionEquality().hash(_nameServer),
       const DeepCollectionEquality().hash(_fallback),
       const DeepCollectionEquality().hash(_proxyServerNameServer),
-      const DeepCollectionEquality().hash(_nameserverPolicy),
       const DeepCollectionEquality().hash(_fakeIpFilter));
 
   @JsonKey(ignore: true)
@@ -1537,8 +1491,6 @@ abstract class _Dns extends Dns {
       @JsonKey(name: 'fallback') final List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       final List<String> proxyServerNameServer,
-      @JsonKey(name: 'nameserver-policy')
-      final List<Map<String, List<String>>> nameserverPolicy,
       @JsonKey(name: "fake-ip-filter")
       final List<String> fakeIpFilter}) = _$DnsImpl;
   const _Dns._() : super._();
@@ -1569,9 +1521,6 @@ abstract class _Dns extends Dns {
   @override
   @JsonKey(name: 'proxy-server-nameserver')
   List<String> get proxyServerNameServer;
-  @override
-  @JsonKey(name: 'nameserver-policy')
-  List<Map<String, List<String>>> get nameserverPolicy;
   @override
   @JsonKey(name: "fake-ip-filter")
   List<String> get fakeIpFilter;
