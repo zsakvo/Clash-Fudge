@@ -84,6 +84,7 @@ dependencies:
   dynamic_color: ^1.6.9
   material_color_utilities: ^0.5.0
   qr_mobile_vision: ^5.0.0
+  flutter_local_notifications: ^16.3.2
 
 dependency_overrides:
   yaml:

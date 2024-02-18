@@ -14,6 +14,7 @@ import 'package:clash_fudge/utils/log.dart';
 import 'package:clash_fudge/utils/math.dart';
 import 'package:clash_fudge/utils/profile.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,10 @@ final androidCoreLoadedProvider = FutureProvider<int?>((ref) async {
   await AndroidCore.setHomeDir(Const.appSupportPath);
   await AndroidCore.startService();
   Log.i([Const.appSupportPath, addr], 'initial info');
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
   return int.parse(addr.split(":").last);
 });
 
