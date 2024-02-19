@@ -38,7 +38,13 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
               subtitle: "更换应用主题颜色",
               onTap: () => context.push("/palette"),
             ),
-            buildListTile(colorScheme: colorScheme, icon: "news", title: "最近请求", subtitle: "查看最近的请求记录"),
+            buildListTile(
+              colorScheme: colorScheme,
+              icon: "news",
+              title: "最近请求",
+              subtitle: "查看最近的请求记录",
+              onTap: () => context.push("/conns"),
+            ),
             buildListTile(
               colorScheme: colorScheme,
               icon: "leaf",

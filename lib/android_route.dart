@@ -1,4 +1,5 @@
 import 'package:clash_fudge/ui/config/android/components/palette_screen.dart';
+import 'package:clash_fudge/ui/connections/android/conn_screen.dart';
 import 'package:clash_fudge/ui/edit_sub/android/edit_sub_screen.dart';
 import 'package:clash_fudge/ui/home/android/home_screen.dart';
 import 'package:clash_fudge/ui/logs/android/logs_screen.dart';
@@ -20,5 +21,6 @@ final GoRouter AndroidRouter = GoRouter(
           );
         }),
     GoRoute(path: '/logs', builder: (context, state) => const LogsScreen()),
+    GoRoute(path: '/conns', builder: (context, state) => const ConnScreen()),
   ],
 );
