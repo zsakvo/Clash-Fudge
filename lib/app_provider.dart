@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
 import 'package:clash_fudge/ui/config/config_provider.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/ui/strategy/strategy_provider.dart';
@@ -448,18 +449,18 @@ class AppConfigNotifier extends AsyncNotifier<AppConfig> {
 
 final appConfigProvider = AsyncNotifierProvider<AppConfigNotifier, AppConfig>(AppConfigNotifier.new);
 
-class ClashProxiesNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)> {
-  @override
-  FutureOr<(List<ClashProxy>, List<ClashProxy>)> build() async {
-    try {
-      final proxies = await Http.fetchProxies();
-      ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
-      return proxies;
-    } catch (e) {
-      return (<ClashProxy>[], <ClashProxy>[]);
-    }
-  }
-}
+// class ClashProxiesNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)> {
+//   @override
+//   FutureOr<(List<ClashProxy>, List<ClashProxy>)> build() async {
+//     try {
+//       final proxies = await Http.fetchProxies();
+//       ref.read(appConfigProvider.notifier).setTrayMenus(proxies.$2);
+//       return proxies;
+//     } catch (e) {
+//       return (<ClashProxy>[], <ClashProxy>[]);
+//     }
+//   }
+// }
 
-final clashProxiesProvider =
-    AsyncNotifierProvider<ClashProxiesNotifier, (List<ClashProxy>, List<ClashProxy>)>(ClashProxiesNotifier.new);
+// final clashProxiesProvider =
+//     AsyncNotifierProvider<ClashProxiesNotifier, (List<ClashProxy>, List<ClashProxy>)>(ClashProxiesNotifier.new);

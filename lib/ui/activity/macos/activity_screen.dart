@@ -1,5 +1,6 @@
 import 'package:clash_fudge/app_provider.dart';
 import 'package:clash_fudge/enums/type.dart';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
 import 'package:clash_fudge/ui/activity/macos/components/flow_chart.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/utils/constant.dart';

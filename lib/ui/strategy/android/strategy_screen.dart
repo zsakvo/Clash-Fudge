@@ -138,12 +138,12 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
       );
     } else {
       final text = "${delay}ms";
-      if (delay < 200) {
+      if (delay < 1000) {
         return Text(
           text,
           style: textTheme.bodySmall?.copyWith(color: Colors.green),
         );
-      } else if (delay > 200 && delay < 500) {
+      } else if (delay > 1000 && delay < 3000) {
         return Text(
           text,
           style: textTheme.bodySmall?.copyWith(color: Colors.orange),

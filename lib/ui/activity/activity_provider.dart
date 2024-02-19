@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:clash_fudge/app_provider.dart';
 import 'package:clash_fudge/models/clash_memory.dart';
 import 'package:clash_fudge/models/clash_snapshot.dart';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/ui/rules/rules_provider.dart';
 import 'package:clash_fudge/utils/constant.dart';

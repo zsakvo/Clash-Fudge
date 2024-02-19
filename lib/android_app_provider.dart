@@ -7,7 +7,6 @@ import 'package:clash_fudge/models/app_config.dart';
 import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/traffic_speed.dart';
 import 'package:clash_fudge/providers/clash_profiles_provider.dart';
-import 'package:clash_fudge/providers/strategy_provider.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/utils/constant.dart';
 import 'package:clash_fudge/utils/log.dart';

@@ -7,6 +7,7 @@ import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/utils/constant.dart';
+import 'package:clash_fudge/utils/log.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -134,5 +135,30 @@ class ClashProfileSubscriberNotifier extends AutoDisposeAsyncNotifier<List<Clash
   }
 }
 
-final clashProxiesProvider =
-    FutureProvider<(List<ClashProxy>, List<ClashProxy>)>((ref) async => await Http.fetchProxies());
+final clashProxiesProvider = FutureProvider<(List<ClashProxy>, List<ClashProxy>)>((ref) async {
+  final res = await Http.fetchProxies();
+  var proxiesValue = res.data['proxies'] as Map<String, dynamic>;
+  final List<ClashProxy> proxies = [];
+  final List<ClashProxy> groups = [];
+  ClashProxy? global;
+  for (var element in proxiesValue.values) {
+    final proxy = ClashProxy.fromJson(element);
+    if (proxy.type == "Compatible" || proxy.name == "default") {
+      continue;
+    }
+    if (proxy.all != null) {
+      if (proxy.name == "GLOBAL") {
+        global = proxy;
+      } else {
+        groups.add(proxy);
+      }
+    } else {
+      proxies.add(proxy);
+    }
+  }
+  if (global != null) {
+    groups.sort((a, b) => global!.all!.indexOf(a.name) - global.all!.indexOf(b.name));
+    groups.add(global);
+  }
+  return (proxies, groups);
+});

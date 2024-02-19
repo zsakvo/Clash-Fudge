@@ -99,23 +99,24 @@ class Http {
     await _dio.put('/configs', queryParameters: {"force": true}, data: {'path': path, 'payload': ''});
   }
 
-  static Future<(List<ClashProxy>, List<ClashProxy>)> fetchProxies() async {
-    return _dio.get('/proxies').then((value) {
-      var proxiesValue = value.data['proxies'] as Map<String, dynamic>;
-      final List<ClashProxy> selectors = [];
-      final List<ClashProxy> proxies = [];
-      for (var element in proxiesValue.values) {
-        final proxy = ClashProxy.fromJson(element);
-        if (ClashSelectorType.contains(proxy.type)) {
-          selectors.add(proxy);
-        } else if (ClashProxyType.contains(proxy.type)) {
-          proxies.add(proxy);
-        } else {
-          Log.e("未知类型的代理：${proxy.type}");
-        }
-      }
-      return (proxies, selectors);
-    });
+  static Future<Response<dynamic>> fetchProxies() async {
+    return _dio.get('/proxies');
+    // .then((value) {
+    //   var proxiesValue = value.data['proxies'] as Map<String, dynamic>;
+    //   final List<ClashProxy> selectors = [];
+    //   final List<ClashProxy> proxies = [];
+    //   for (var element in proxiesValue.values) {
+    //     final proxy = ClashProxy.fromJson(element);
+    //     if (ClashSelectorType.contains(proxy.type)) {
+    //       selectors.add(proxy);
+    //     } else if (ClashProxyType.contains(proxy.type)) {
+    //       proxies.add(proxy);
+    //     } else {
+    //       Log.e("未知类型的代理：${proxy.type}");
+    //     }
+    //   }
+    //   return (proxies, selectors);
+    // });
   }
 
   static Future patchConfig(Map<String, dynamic> data) async {

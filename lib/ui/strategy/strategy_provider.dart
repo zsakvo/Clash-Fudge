@@ -1,5 +1,6 @@
 import 'package:clash_fudge/app_provider.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
+import 'package:clash_fudge/providers/clash_profiles_provider.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
