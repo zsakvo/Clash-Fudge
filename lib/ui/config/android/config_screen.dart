@@ -1,3 +1,4 @@
+import 'package:clash_fudge/providers/geoip_file_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,7 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    final geoipFile = ref.watch(geoipFileProvider);
     return Scaffold(
       backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
       body: SingleChildScrollView(
@@ -30,9 +31,13 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
               onTap: () => context.push("/palette"),
             ),
             buildListTile(colorScheme: colorScheme, icon: "news", title: "最近请求", subtitle: "查看最近的请求记录"),
-            buildListTile(colorScheme: colorScheme, icon: "android", title: "日志查看", subtitle: "查看内核日志"),
+            buildListTile(colorScheme: colorScheme, icon: "leaf", title: "日志查看", subtitle: "查看内核日志"),
             buildListTile(
-                colorScheme: colorScheme, icon: "crosshair", title: "更新 GeoIP 数据库", subtitle: "自带的是精简版，初次安装建议更新一下"),
+                colorScheme: colorScheme,
+                icon: "crosshair",
+                title: "更新 GeoIP 数据库",
+                subtitle: "更新时间：${geoipFile.whenOrNull(data: (file) => file.lastModifiedSync().toString()) ?? "---"}",
+                onTap: () => ref.read(geoipFileProvider.notifier).upgrade()),
           ],
         ),
       ),
