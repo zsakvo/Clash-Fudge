@@ -32,6 +32,20 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
         false;
     return Scaffold(
         backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
+        appBar: AppBar(
+          leadingWidth: 60,
+          titleSpacing: 16,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Image.asset(
+              'assets/imgs/logo.png',
+            ),
+          ),
+          title: const Text("Clash-Fudge"),
+          backgroundColor: colorScheme.surfaceVariant.withOpacity(0),
+          scrolledUnderElevation: 0,
+          elevation: 0,
+        ),
         body: CustomScrollView(
           slivers: [
             SliverPadding(

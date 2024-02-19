@@ -20,6 +20,14 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
     final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
     final strategey = ref.watch(strategeyProvider);
     final currentIndex = useState(0);
+    final columnNum = useState(2);
+    final ratio = useMemoized(() {
+      if (columnNum.value == 2) {
+        return 1.6;
+      } else {
+        return 3.6;
+      }
+    }, [columnNum.value]);
     final delayMap = ref.watch(proxyDelayProvider);
     final group = strategey.value!.$2[currentIndex.value];
     final proxies = strategey.value?.$1;
@@ -27,6 +35,28 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
         length: strategey.value!.$2.length,
         child: Scaffold(
             backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
+            appBar: AppBar(
+              leadingWidth: 60,
+              titleSpacing: 16,
+              title: const Text("策略"),
+              backgroundColor: colorScheme.surfaceVariant.withOpacity(0),
+              scrolledUnderElevation: 0,
+              elevation: 0,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      if (columnNum.value == 2) {
+                        columnNum.value = 1;
+                      } else {
+                        columnNum.value = 2;
+                      }
+                    },
+                    icon: Icon(
+                      // 单列
+                      Icons.view_column_rounded, color: colorScheme.secondary,
+                    ))
+              ],
+            ),
             body: strategey.whenOrNull(
                   data: (data) {
                     return Column(
@@ -43,8 +73,8 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
                         Expanded(
                             child: GridView.count(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
-                          crossAxisCount: 2,
-                          childAspectRatio: 1.6,
+                          crossAxisCount: columnNum.value,
+                          childAspectRatio: ratio,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                           children: (group.all ?? []).mapIndexed((i, proxy) {

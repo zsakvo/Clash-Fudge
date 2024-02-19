@@ -46,6 +46,7 @@ class GeoipFileNotifier extends AsyncNotifier<File> {
           payload: '');
     }
     await Http.geo("${Const.appSupportPath}/config.yaml");
+    socket = WebSocketChannel.connect(Uri.parse("ws://${Const.clashServerUrl}/logs?level=warning"));
     socket!.stream.listen((event) async {
       if (event.toString().contains("update GEO databases successful")) {
         socket!.sink.close(status.goingAway);

@@ -20,6 +20,14 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
     final geoipFile = ref.watch(geoipFileProvider);
     return Scaffold(
       backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
+      appBar: AppBar(
+        leadingWidth: 60,
+        titleSpacing: 16,
+        title: const Text("设置"),
+        backgroundColor: colorScheme.surfaceVariant.withOpacity(0),
+        scrolledUnderElevation: 0,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -31,7 +39,13 @@ class _ConfigScreenState extends ConsumerState<ConfigScreen> {
               onTap: () => context.push("/palette"),
             ),
             buildListTile(colorScheme: colorScheme, icon: "news", title: "最近请求", subtitle: "查看最近的请求记录"),
-            buildListTile(colorScheme: colorScheme, icon: "leaf", title: "日志查看", subtitle: "查看内核日志"),
+            buildListTile(
+              colorScheme: colorScheme,
+              icon: "leaf",
+              title: "日志查看",
+              subtitle: "查看内核日志",
+              onTap: () => context.push("/logs"),
+            ),
             buildListTile(
                 colorScheme: colorScheme,
                 icon: "crosshair",

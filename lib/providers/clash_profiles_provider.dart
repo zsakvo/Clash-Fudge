@@ -7,7 +7,6 @@ import 'package:clash_fudge/models/clash_profile_subscriber.dart';
 import 'package:clash_fudge/models/clash_proxy.dart';
 import 'package:clash_fudge/request/http.dart';
 import 'package:clash_fudge/utils/constant.dart';
-import 'package:clash_fudge/utils/log.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';

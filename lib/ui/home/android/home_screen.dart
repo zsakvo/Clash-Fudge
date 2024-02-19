@@ -29,20 +29,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         false;
     ref.watch(androidAppConfigProvider);
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 60,
-        titleSpacing: 16,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Image.asset(
-            'assets/imgs/logo.png',
-          ),
-        ),
-        title: const Text("Clash-Fudge"),
-        backgroundColor: colorScheme.surfaceVariant.withOpacity(0.2),
-        scrolledUnderElevation: 0,
-        elevation: 0,
-      ),
       body: PageView(
         controller: pageController,
         onPageChanged: (value) {
