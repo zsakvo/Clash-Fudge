@@ -10,10 +10,9 @@ import 'clash_profiles_provider.dart';
 class StrategyNotifier extends AsyncNotifier<(List<ClashProxy>, List<ClashProxy>)?> {
   @override
   FutureOr<(List<ClashProxy>, List<ClashProxy>)?> build() async {
-    final d = ref.watch(clashProxiesProvider);
-    return d.whenOrNull(
-      data: (data) => data,
-    );
+    return ref.watch(clashProxiesProvider).whenOrNull(
+          data: (data) => data,
+        );
   }
 
   testProxy(String name) async {

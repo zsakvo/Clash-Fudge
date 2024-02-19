@@ -22,6 +22,7 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
     final currentIndex = useState(0);
     final delayMap = ref.watch(proxyDelayProvider);
     final group = strategey.value!.$2[currentIndex.value];
+    final proxies = strategey.value?.$1;
     return DefaultTabController(
         length: strategey.value!.$2.length,
         child: Scaffold(
@@ -46,59 +47,72 @@ class _StrategyScreenState extends ConsumerState<StrategyScreen> {
                           childAspectRatio: 1.6,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          children: (group.all ?? [])
-                              .mapIndexed((i, proxy) => GestureDetector(
-                                  onTap: () {
-                                    ref.read(strategeyProvider.notifier).setProxy(groupName: group.name, name: proxy);
-                                  },
-                                  child: Card(
-                                      elevation: 0,
-                                      margin: EdgeInsets.zero,
-                                      color: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.all(Radius.circular(12)),
-                                        // color
-                                        side: BorderSide(color: colorScheme.secondaryContainer.withOpacity(0.8)),
-                                      ),
-                                      child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      proxy,
-                                                      style:
-                                                          textTheme.bodyMedium?.copyWith(color: colorScheme.secondary),
-                                                      maxLines: 2,
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
+                          children: (group.all ?? []).mapIndexed((i, proxy) {
+                            final isSelected = proxy == group.now;
+                            return GestureDetector(
+                                onTap: () {
+                                  ref.read(strategeyProvider.notifier).setProxy(groupName: group.name, name: proxy);
+                                },
+                                child: Card(
+                                    elevation: 0,
+                                    margin: EdgeInsets.zero,
+                                    color: isSelected ? colorScheme.secondaryContainer : Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                      // color
+                                      side: BorderSide(
+                                          color: isSelected
+                                              ? colorScheme.tertiary
+                                              : colorScheme.secondaryContainer.withOpacity(0.8)),
+                                    ),
+                                    child: Stack(
+                                        // padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                                        children: [
+                                          Positioned(
+                                            left: 12,
+                                            top: 12,
+                                            right: isSelected ? 36 : 12,
+                                            child: Text(
+                                              proxy,
+                                              style: textTheme.bodyMedium?.copyWith(color: colorScheme.secondary),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          if (isSelected)
+                                            Positioned(
+                                                right: 12,
+                                                top: 12,
+                                                child: Icon(
+                                                  Icons.check_circle,
+                                                  color: colorScheme.primary,
+                                                  size: 20,
+                                                )),
+                                          if (delayMap.value![proxy] != null)
+                                            Positioned(
+                                                left: 12,
+                                                bottom: 12,
+                                                child: getDelayText(delayMap.value![proxy]!, textTheme)),
+                                          if ((proxies?.lastWhereOrNull((element) => element.name == proxy)?.udp) ??
+                                              false)
+                                            Positioned(
+                                                bottom: 12,
+                                                right: 12,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(color: colorScheme.tertiary),
+                                                      borderRadius: BorderRadius.circular(4)),
+                                                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                                                  child: Text(
+                                                    "UDP",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: colorScheme.tertiary),
                                                   ),
-                                                  if (proxy == group.now)
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 6),
-                                                      child: Align(
-                                                        alignment: Alignment.topRight,
-                                                        child: Icon(
-                                                          Icons.check_circle,
-                                                          color: colorScheme.primary,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                    )
-                                                ],
-                                              ),
-                                              if (delayMap.value![proxy] != null)
-                                                Align(
-                                                    alignment: Alignment.bottomLeft,
-                                                    child: getDelayText(delayMap.value![proxy]!, textTheme))
-                                            ],
-                                          )))))
-                              .toList(),
+                                                )),
+                                        ])));
+                          }).toList(),
                         ))
                       ],
                     );
