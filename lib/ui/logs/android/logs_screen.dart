@@ -1,8 +1,9 @@
 import 'package:clash_fudge/providers/log_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LogsScreen extends ConsumerStatefulWidget {
+class LogsScreen extends StatefulHookConsumerWidget {
   const LogsScreen({super.key});
 
   @override
@@ -13,7 +14,23 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final logs = ref.watch(logProvider);
+    final logPro = ref.watch(logProvider);
+    final logs = logPro.$1;
+    final level = logPro.$2;
+    final buildMenuItem = useCallback((String lv) {
+      return MenuItemButton(
+          style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(const Size(120, 40)),
+          ),
+          trailingIcon: Icon(
+            Icons.check,
+            color: lv == level.name ? null : Colors.transparent,
+          ),
+          child: Text(lv[0].toUpperCase() + lv.substring(1)),
+          onPressed: () {
+            ref.read(logProvider.notifier).filter(lv);
+          });
+    }, [level]);
     return Scaffold(
       appBar: AppBar(
         title: const Text("内核日志"),
@@ -29,31 +46,12 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
             },
           ),
           MenuAnchor(
-            alignmentOffset: Offset(-92, 0),
+            alignmentOffset: const Offset(-92, 0),
             menuChildren: [
-              MenuItemButton(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size(120, 40)),
-                  ),
-                  child: const Text("Info"),
-                  onPressed: () {
-                    ref.read(logProvider.notifier).filter("info");
-                  }),
-              MenuItemButton(
-                  child: const Text("Debug"),
-                  onPressed: () {
-                    ref.read(logProvider.notifier).filter("debug");
-                  }),
-              MenuItemButton(
-                  child: const Text("Warning"),
-                  onPressed: () {
-                    ref.read(logProvider.notifier).filter("warning");
-                  }),
-              MenuItemButton(
-                  child: const Text("Error"),
-                  onPressed: () {
-                    ref.read(logProvider.notifier).filter("error");
-                  }),
+              buildMenuItem("info"),
+              buildMenuItem("debug"),
+              buildMenuItem("warning"),
+              buildMenuItem("error"),
             ],
             builder: (context, controller, child) {
               return IconButton(
