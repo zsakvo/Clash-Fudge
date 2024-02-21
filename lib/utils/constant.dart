@@ -58,3 +58,5 @@ class Const {
 }
 
 bool kIsRoot = false;
+
+bool kIsDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;

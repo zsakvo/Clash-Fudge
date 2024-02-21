@@ -1258,11 +1258,10 @@ packages:
   window_manager:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: ef786b1574455ca141cea899ca2db788731163d4
-      url: "https://github.com/leanflutter/window_manager.git"
-    source: git
+      name: window_manager
+      sha256: b3c895bdf936c77b83c5254bec2e6b3f066710c1f89c38b20b8acc382b525494
+      url: "https://pub.dev"
+    source: hosted
     version: "0.3.8"
   xdg_directories:
     dependency: transitive
@@ -1303,6 +1302,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  yaru_icons:
+    dependency: "direct main"
+    description:
+      name: yaru_icons
+      sha256: "2dff89ee31c2dd888e1ce146f0faef1c8de4ffbc90cb6466aacd55c3a9ad0674"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  yaru_widgets:
+    dependency: "direct dev"
+    description:
+      name: yaru_widgets
+      sha256: "0bade922090f25eedcc88cdc15b8a6adbaba4e4b56d793e999224b22c95a19d2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.0"
+  yaru_window:
+    dependency: transitive
+    description:
+      name: yaru_window
+      sha256: c9d16f78962652ad71aa160ab0a1e2e5924359439303394f980fd00eefc905eb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  yaru_window_linux:
+    dependency: transitive
+    description:
+      name: yaru_window_linux
+      sha256: "3676355492eba0461f03acf1b7420f7885982d1bffe113fccdca9415fbe39f5d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
+  yaru_window_manager:
+    dependency: transitive
+    description:
+      name: yaru_window_manager
+      sha256: "2d358263d19ae6598df21d6d8c0d25e75c79a82f459b63b0013a13e395c48b23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  yaru_window_platform_interface:
+    dependency: transitive
+    description:
+      name: yaru_window_platform_interface
+      sha256: e9f8cd34e207d7f7b771ae70dee347ed974cee06b981819c4181b3e474e52254
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  yaru_window_web:
+    dependency: transitive
+    description:
+      name: yaru_window_web
+      sha256: "3ff30758a330d7626d54643df0cca6c179782f401aba7752da9cc0d60c9a6f74"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
 sdks:
   dart: ">=3.2.4 <4.0.0"
   flutter: ">=3.16.0"

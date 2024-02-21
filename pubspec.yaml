@@ -67,10 +67,7 @@ dependencies:
   file_picker: ^6.1.1
   url_launcher: ^6.2.4
   shortcut_menu_extender: ^0.1.1
-  window_manager:
-    git:
-      url: https://github.com/leanflutter/window_manager.git
-      ref: main
+  window_manager: ^0.3.8
   protocol_handler: ^0.2.0
   launch_at_startup: ^0.2.2
   package_info_plus: ^5.0.1
@@ -80,6 +77,7 @@ dependencies:
   local_notifier: ^0.1.5
   watcher: ^1.1.0
   collection: ^1.18.0
+  yaru_icons: ^2.4.0
 
 dependency_overrides:
   yaml:
@@ -102,6 +100,7 @@ dev_dependencies:
   freezed: ^2.4.6
   json_serializable: ^6.7.1
   yaru: ^1.2.1
+  yaru_widgets: ^3.6.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
